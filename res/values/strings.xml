@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Board</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_show">ShowActivity</string>
+    <string name="title_activity_post_show">PostShowActivity</string>
+    <string name="boardBuyBtnText">삽니다</string>
+    <string name="boardSellBtnText">팝니다</string>
+    <string name="boardInquiryBtnText">문의 및 견적의뢰</string>
+    <string name="boardSellCompleteBtnText">판매 완료</string>
+    <string name="postShowTitle">제목</string>
+    <string name="postShowDescription">내용</string>
+    <string name="postShowShowPicture">사진 보기</string>
+    <string name="title_activity_auth">AuthActivity</string>
+
+</resources>
