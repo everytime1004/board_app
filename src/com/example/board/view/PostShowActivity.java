@@ -1,6 +1,5 @@
 package com.example.board.view;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -8,13 +7,8 @@ import java.net.URLEncoder;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpResponseException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -34,7 +28,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.example.board.R;
 import com.example.board.lib.UrlJsonAsyncTask;
-import com.example.board.model.ServerIp;
+import com.example.board.model.NetworkInfo;
 
 public class PostShowActivity extends SherlockActivity {
 
@@ -62,6 +56,8 @@ public class PostShowActivity extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_show);
 
+		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
+
 		TextView task_show_title = (TextView) findViewById(R.id.task_show_title);
 		TextView task_show_description = (TextView) findViewById(R.id.task_show_description);
 
@@ -71,14 +67,13 @@ public class PostShowActivity extends SherlockActivity {
 		task_show_description.setText(taskIntent.getStringExtra("description"));
 		mPostId = taskIntent.getIntExtra("post_id", 0);
 
-		SHOW_TASK_ENDPOINT_URL = "http://" + ServerIp.IP + "/api/v1/posts/"
+		SHOW_TASK_ENDPOINT_URL = "http://" + NetworkInfo.IP + "/api/v1/posts/"
 				+ mPostId + ".json";
 
 		ShowTaskTask showTask = new ShowTaskTask(PostShowActivity.this);
 		showTask.setMessageLoading("Loading task...");
+		showTask.setAuthToken(mPreferences.getString("AuthToken", ""));
 		showTask.execute(SHOW_TASK_ENDPOINT_URL);
-
-		mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
 	}
 
 	public void imageShowBtn(View v) {
@@ -137,42 +132,6 @@ public class PostShowActivity extends SherlockActivity {
 	private class ShowTaskTask extends UrlJsonAsyncTask {
 		public ShowTaskTask(Context context) {
 			super(context);
-		}
-
-		@Override
-		protected JSONObject doInBackground(String... urls) {
-			DefaultHttpClient client = new DefaultHttpClient();
-			HttpGet post = new HttpGet(urls[0]);
-			String response = null;
-			JSONObject json = new JSONObject();
-
-			try {
-				try {
-					json.put("success", false);
-					json.put("info", "Something went wrong. Retry!");
-
-					post.setHeader("Accept", "application/json");
-					post.setHeader("Content-Type", "application/json");
-					post.setHeader("Authorization", "Token token="
-							+ mPreferences.getString("AuthToken", ""));
-
-					ResponseHandler<String> responseHandler = new BasicResponseHandler();
-					response = client.execute(post, responseHandler);
-					json = new JSONObject(response);
-
-				} catch (HttpResponseException e) {
-					e.printStackTrace();
-					Log.e("ClientProtocol", "" + e);
-				} catch (IOException e) {
-					e.printStackTrace();
-					Log.e("IO", "" + e);
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
-				Log.e("JSON", "" + e);
-			}
-
-			return json;
 		}
 
 		@Override

@@ -18,13 +18,13 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.example.board.R;
 import com.example.board.lib.UrlJsonAsyncTask;
+import com.example.board.model.NetworkInfo;
 import com.example.board.model.Post;
 import com.example.board.model.PostAdapter;
-import com.example.board.model.ServerIp;
 
 public class PostIndexActivity extends SherlockActivity {
 
-	private static final String TASKS_URL = "http://" + ServerIp.IP
+	private static final String TASKS_URL = "http://" + NetworkInfo.IP
 			+ "/api/v1/posts.json";
 
 	private SharedPreferences mPreferences;
@@ -44,8 +44,15 @@ public class PostIndexActivity extends SherlockActivity {
 			loadPostFromServer(TASKS_URL, mCategory);
 		} else {
 			Toast.makeText(this, "로그인을 먼저 해주세요", 2000).show();
+			finish();
 		}
 
+	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
 	}
 
 	private void loadPostFromServer(String url, String category) {
@@ -77,7 +84,7 @@ public class PostIndexActivity extends SherlockActivity {
 				for (int i = 0; i < length; i++) {
 					jsonTask = jsonTasks.getJSONObject(i);
 
-					if (category == jsonTask.getString("category")) {
+					if (category.equals(jsonTask.getString("category")) || jsonTask.getString("category").equals("공지사항")) {
 
 						tasksArray.add(new Post(jsonTask.getInt("id"), jsonTask
 								.getString("title"), jsonTask
@@ -109,7 +116,7 @@ public class PostIndexActivity extends SherlockActivity {
 			Post post = (Post) parentView.getItemAtPosition(position);
 
 			Intent intent = new Intent(parentView.getContext(),
-					PostIndexActivity.class);
+					PostShowActivity.class);
 			intent.putExtra("title", post.getTitle());
 			intent.putExtra("description", post.getDescription());
 			intent.putExtra("post_id", post.getId());

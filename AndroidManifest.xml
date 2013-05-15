@@ -8,11 +8,44 @@
         android:minSdkVersion="11"
         android:targetSdkVersion="17" />
 
+    <!-- GCM 관련 퍼미션 -->
+    <permission
+        android:name="com.example.board.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <!-- GCM 받기 -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!-- GCM을 받으려면 구글 계정 필요 -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- 메시지 받을 때 wake up 하기 위해 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 네트워크 접속 권한 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <!-- GCM 리시버 -->
+        <receiver
+            android:name="com.google.android.gcm.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <!-- Receives the registration id. -->
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.example.board" />
+            </intent-filter>
+        </receiver>
+
+        <!-- GCM 리시버에서 돌리는 서비스 -->
+        <service android:name="com.example.board.controller.GCMIntentService" />
+        <!-- 서비스명 변경하면 안됨 -->
+
         <activity
             android:name="com.example.board.view.HomeActivity"
             android:label="@string/app_name" >
