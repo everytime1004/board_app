@@ -38,12 +38,12 @@
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.example.board" />
+                <category android:name="com.example.board.controller" />
             </intent-filter>
         </receiver>
 
         <!-- GCM 리시버에서 돌리는 서비스 -->
-        <service android:name="com.example.board.controller.GCMIntentService" />
+        <service android:name="com.example.board.GCMIntentService" />
         <!-- 서비스명 변경하면 안됨 -->
 
         <activity
@@ -66,6 +66,14 @@
         <activity
             android:name="com.example.board.view.AuthActivity"
             android:label="@string/title_activity_auth" >
+        </activity>
+        <activity
+            android:name="com.example.board.view.SettingActivity"
+            android:label="@string/setting" >
+        </activity>
+        <activity
+            android:name="com.example.board.view.PostCreateActivity"
+            android:label="@string/create_task" >
         </activity>
     </application>
 

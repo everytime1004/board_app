@@ -968,10 +968,12 @@ containing a value of this type.
         public static final int abs__title=0x7f04001b;
         public static final int abs__titleDivider=0x7f04001c;
         public static final int abs__up=0x7f04000b;
-        public static final int action_login=0x7f040055;
-        public static final int action_logout=0x7f040056;
-        public static final int action_registeration=0x7f040054;
-        public static final int action_settings=0x7f040057;
+        public static final int action_create_task=0x7f040059;
+        public static final int action_login=0x7f040057;
+        public static final int action_logout=0x7f040058;
+        public static final int action_registeration=0x7f040056;
+        public static final int action_setting=0x7f04005a;
+        public static final int action_settings=0x7f04005b;
         public static final int boardBuyBtn=0x7f040033;
         public static final int boardInquiryBtn=0x7f040036;
         public static final int boardSellBtn=0x7f040034;
@@ -981,8 +983,10 @@ containing a value of this type.
         public static final int homeAsUp=0x7f040006;
         public static final int imageShowBtn=0x7f040043;
         public static final int listMode=0x7f040002;
-        public static final int loginButton=0x7f040051;
+        public static final int loginButton=0x7f040053;
         public static final int normal=0x7f040001;
+        public static final int notyButton=0x7f040052;
+        public static final int notyCb=0x7f040051;
         public static final int phone_first=0x7f04004d;
         public static final int phone_second=0x7f04004e;
         public static final int phone_third=0x7f04004f;
@@ -1006,10 +1010,10 @@ containing a value of this type.
         public static final int targetImage3=0x7f04003c;
         public static final int targetImage4=0x7f04003d;
         public static final int targetImage5=0x7f04003e;
-        public static final int task_category=0x7f040053;
+        public static final int task_category=0x7f040055;
         public static final int task_show_description=0x7f040042;
         public static final int task_show_title=0x7f040041;
-        public static final int task_title=0x7f040052;
+        public static final int task_title=0x7f040054;
         public static final int useLogo=0x7f040004;
         public static final int userEmail=0x7f040049;
         public static final int userName=0x7f04004a;
@@ -1049,10 +1053,11 @@ containing a value of this type.
         public static final int activity_post_index=0x7f030019;
         public static final int activity_post_show=0x7f03001a;
         public static final int activity_register=0x7f03001b;
-        public static final int activity_sign_in=0x7f03001c;
-        public static final int post_row=0x7f03001d;
-        public static final int sherlock_spinner_dropdown_item=0x7f03001e;
-        public static final int sherlock_spinner_item=0x7f03001f;
+        public static final int activity_setting=0x7f03001c;
+        public static final int activity_sign_in=0x7f03001d;
+        public static final int post_row=0x7f03001e;
+        public static final int sherlock_spinner_dropdown_item=0x7f03001f;
+        public static final int sherlock_spinner_item=0x7f030020;
     }
     public static final class menu {
         public static final int auth=0x7f0b0000;
@@ -1061,7 +1066,7 @@ containing a value of this type.
         public static final int show=0x7f0b0003;
     }
     public static final class string {
-        public static final int LoginPoasswordHint=0x7f090020;
+        public static final int LoginPoasswordHint=0x7f090022;
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_bar_home_description=0x7f090000;
@@ -1113,14 +1118,16 @@ containing a value of this type.
         public static final int boardInquiryBtnText=0x7f090017;
         public static final int boardSellBtnText=0x7f090016;
         public static final int boardSellCompleteBtnText=0x7f090018;
+        public static final int create_task=0x7f09001e;
         public static final int hello_world=0x7f090011;
         public static final int login=0x7f09001c;
-        public static final int loginIdHint=0x7f09001f;
+        public static final int loginIdHint=0x7f090021;
         public static final int logout=0x7f09001d;
         public static final int postShowDescription=0x7f09001a;
         public static final int postShowShowPicture=0x7f09001b;
         public static final int postShowTitle=0x7f090019;
-        public static final int registeration=0x7f09001e;
+        public static final int registeration=0x7f090020;
+        public static final int setting=0x7f09001f;
         public static final int title_activity_auth=0x7f090014;
         public static final int title_activity_post_show=0x7f090013;
         public static final int title_activity_show=0x7f090012;

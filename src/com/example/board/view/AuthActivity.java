@@ -244,7 +244,7 @@ public class AuthActivity extends SherlockActivity {
 					editor.commit();
 
 					// launch the HomeActivity and close this one
-					Intent intent = new Intent(getApplicationContext(),
+					Intent intent = new Intent(AuthActivity.this,
 							HomeActivity.class);
 					startActivity(intent);
 				}

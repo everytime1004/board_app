@@ -13,6 +13,7 @@ public class Lazy {
 	}
 	
 	public static class Str {
+		@SuppressWarnings("deprecation")
 		public static String urlEncode(String value, boolean trim) {
 			return java.net.URLEncoder.encode(value.trim());	
 		}

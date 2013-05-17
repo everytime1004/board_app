@@ -1,19 +1,4 @@
-/*
- * Copyright 2012 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.example.board.controller;
+package com.example.board;
 
 import java.util.Iterator;
 
@@ -22,10 +7,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.board.R;
+import com.example.board.controller.ServerUtilities;
 import com.example.board.model.NetworkInfo;
 import com.example.board.view.HomeActivity;
 import com.google.android.gcm.GCMBaseIntentService;
@@ -35,8 +21,8 @@ import com.google.android.gcm.GCMBaseIntentService;
  */
 public class GCMIntentService extends GCMBaseIntentService {
 	
-	@SuppressWarnings("hiding")
 	private static final String TAG = "GCMIntentService";
+	private SharedPreferences mPreferences = null;
     
 	public GCMIntentService() {
 		super(NetworkInfo.PROJECT_ID);
@@ -50,10 +36,18 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onRegistered(Context context, String registrationId) {
 		Log.i(TAG, "Device registered: regId = " + registrationId);
-		GCMSendIdToServer sendIdToServer = new GCMSendIdToServer(context,
-				registrationId);
-		sendIdToServer.setMessageLoading("GCM Register.....");
-		sendIdToServer.execute(NetworkInfo.GCM_URL);
+		
+		mPreferences = getSharedPreferences("noty", MODE_PRIVATE);
+		
+		SharedPreferences.Editor editor = mPreferences.edit();
+		editor.putString("regId", registrationId);
+		editor.commit();
+		
+		ServerUtilities.register(context, registrationId, mPreferences.getBoolean("noty", true));
+//		GCMSendIdToServer sendIdToServer = new GCMSendIdToServer(context,
+//				registrationId);
+//		sendIdToServer.setMessageLoading("GCM Registered...");
+//		sendIdToServer.execute(NetworkInfo.GCM_URL);
 	}
 
 	@Override

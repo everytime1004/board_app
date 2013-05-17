@@ -11,6 +11,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -21,11 +22,12 @@ import com.example.board.lib.UrlJsonAsyncTask;
 public class GCMSendIdToServer extends UrlJsonAsyncTask {
 	private SharedPreferences mPreferences;
 	private String regId = null;
+	private ProgressDialog progressDialog = null;
 
 	public GCMSendIdToServer(Context context, String regId) {
 		super(context);
 
-		this.mPreferences = context.getSharedPreferences("CurrentUser",
+		this.mPreferences = context.getSharedPreferences("noty",
 				Context.MODE_PRIVATE);
 		this.regId = regId;
 	}
@@ -43,9 +45,8 @@ public class GCMSendIdToServer extends UrlJsonAsyncTask {
 			try {
 				json.put("success", false);
 				json.put("info", "Something went wrong. Retry!");
-				taskObj.put("reg_id", mPreferences.getString("regid", regId));
+				taskObj.put("reg_id", regId);
 				taskObj.put("noty", mPreferences.getBoolean("noty", true));
-				taskObj.put("userName", mPreferences.getString("UserName", "X"));
 
 				holder.put("gcm", taskObj);
 				StringEntity se = new StringEntity(holder.toString(), "utf-8");
@@ -74,6 +75,7 @@ public class GCMSendIdToServer extends UrlJsonAsyncTask {
 
 	@Override
 	protected void onPostExecute(JSONObject json) {
+		progressDialog.dismiss();
 		try {
 			if (json.getBoolean("success")) {
 				Toast.makeText(context, json.getString("info"),

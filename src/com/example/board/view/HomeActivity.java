@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.util.Log;
 import android.view.View;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -38,7 +36,7 @@ public class HomeActivity extends SherlockActivity {
 					| ActionBar.NAVIGATION_MODE_STANDARD
 					| ActionBar.DISPLAY_HOME_AS_UP
 					| ActionBar.DISPLAY_SHOW_HOME);
-
+			
 			mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 		}
 		GCMRegistrar.unregister(this);
@@ -81,6 +79,16 @@ public class HomeActivity extends SherlockActivity {
 			startActivity(logoutIntent);
 			finish();
 			break;
+			
+		case R.id.action_create_task:
+			Intent createTaskIntent = new Intent(this, PostCreateActivity.class);
+			startActivity(createTaskIntent);
+			break;
+			
+		case R.id.action_setting:
+			Intent settingIntent = new Intent(this, SettingActivity.class);
+			startActivity(settingIntent);
+			break;
 		}
 
 		return true;
@@ -112,10 +120,10 @@ public class HomeActivity extends SherlockActivity {
 		regId = GCMRegistrar.getRegistrationId(this);
 		if (regId.equals("")) {
 			// Automatically registers application on startup.
-			GCMRegistrar.register(this, NetworkInfo.PROJECT_ID);
+			GCMRegistrar.register(HomeActivity.this, NetworkInfo.PROJECT_ID);
 		} else {
 			// Device is already registered on GCM, check server.
-			if (GCMRegistrar.isRegisteredOnServer(this)) {
+			if (GCMRegistrar.isRegisteredOnServer(HomeActivity.this)) {
 			} else {
 				// Try to register again, but not in the UI thread.
 				// It's also necessary to cancel the thread onDestroy(),

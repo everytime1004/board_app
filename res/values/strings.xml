@@ -16,6 +16,8 @@
     <string name="postShowShowPicture">사진 보기</string>
     <string name="login">로그인</string>
     <string name="logout">로그아웃</string>
+    <string name="create_task">글 쓰기</string>
+    <string name="setting">환경 설정</string>
     <string name="registeration">회원 가입</string>
     <string name="loginIdHint">아이디를 입력해주세요</string>
     <string name="LoginPoasswordHint">패스워드를 입력해주세요</string>
