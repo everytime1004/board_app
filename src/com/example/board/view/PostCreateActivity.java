@@ -66,7 +66,7 @@ public class PostCreateActivity extends SherlockActivity {
 
 		addItemsOnSpinner();
 
-		mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
+		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 	}
 
 	@Override
@@ -158,6 +158,7 @@ public class PostCreateActivity extends SherlockActivity {
 			// everything is ok!
 			CreateTaskTask createTask = new CreateTaskTask(PostCreateActivity.this);
 			createTask.setMessageLoading("Creating new task...");
+			createTask.setAuthToken(mPreferences.getString("AuthToken", ""));
 			createTask.execute(CREATE_TASK_ENDPOINT_URL);
 		}
 	}

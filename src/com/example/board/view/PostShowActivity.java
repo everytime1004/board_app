@@ -2,6 +2,8 @@ package com.example.board.view;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 
 import org.apache.http.HttpEntity;
@@ -179,31 +181,44 @@ public class PostShowActivity extends SherlockActivity {
 		final HttpGet getRequest = new HttpGet(totalURL);
 
 		try {
-			HttpResponse response = client.execute(getRequest);
-			final int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != HttpStatus.SC_OK) {
-				Log.w("ImageDownloader", "Error " + statusCode
-						+ " while retrieving bitmap from " + url);
-				return null;
-			}
 
-			final HttpEntity entity = response.getEntity();
-			if (entity != null) {
-				InputStream inputStream = null;
-				try {
-					inputStream = entity.getContent();
-					BitmapFactory.Options options = new BitmapFactory.Options();
-					options.inSampleSize = 2;
-					final Bitmap bitmap = BitmapFactory
-							.decodeStream(inputStream);
-					return bitmap;
-				} finally {
-					if (inputStream != null) {
-						inputStream.close();
-					}
-					entity.consumeContent();
-				}
-			}
+			URL imageUrl = new URL(totalURL);
+			URLConnection connection = imageUrl.openConnection();
+			connection.setUseCaches(true);
+
+			InputStream inputStream = connection.getInputStream();
+
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 2;
+			final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+			return bitmap;
+
+//			HttpResponse response = client.execute(getRequest);
+//			final int statusCode = response.getStatusLine().getStatusCode();
+//			if (statusCode != HttpStatus.SC_OK) {
+//				Log.w("ImageDownloader", "Error " + statusCode
+//						+ " while retrieving bitmap from " + url);
+//				return null;
+//			}
+//
+//			final HttpEntity entity = response.getEntity();
+//			if (entity != null) {
+//				InputStream inputStream = null;
+//				try {
+//					inputStream = entity.getContent();
+//					BitmapFactory.Options options = new BitmapFactory.Options();
+//					options.inSampleSize = 2;
+//					final Bitmap bitmap = BitmapFactory
+//							.decodeStream(inputStream);
+//					return bitmap;
+//				} finally {
+//					if (inputStream != null) {
+//						inputStream.close();
+//					}
+//					entity.consumeContent();
+//				}
+//			}
 		} catch (Exception e) {
 			// Could provide a more explicit error message for IOException or
 			// IllegalStateException
