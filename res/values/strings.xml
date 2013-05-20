@@ -21,5 +21,6 @@
     <string name="registeration">회원 가입</string>
     <string name="loginIdHint">아이디를 입력해주세요</string>
     <string name="LoginPoasswordHint">패스워드를 입력해주세요</string>
+    <string name="addImageBtnText">사진 추가</string>
 
 </resources>

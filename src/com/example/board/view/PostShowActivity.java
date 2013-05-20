@@ -78,15 +78,6 @@ public class PostShowActivity extends SherlockActivity {
 		showTask.execute(SHOW_TASK_ENDPOINT_URL);
 	}
 
-	public void imageShowBtn(View v) {
-		switch (v.getId()) {
-		case R.id.imageShowBtn:
-			BitmapDownloaderTask task = new BitmapDownloaderTask();
-			task.execute();
-		}
-
-	}
-
 	class BitmapDownloaderTask extends AsyncTask<String, Void, Boolean> {
 
 		public BitmapDownloaderTask() {
@@ -149,8 +140,12 @@ public class PostShowActivity extends SherlockActivity {
 						imageBitMapURL[i] = image;
 					}
 				}
-				Toast.makeText(context, json.getString("info"),
-						Toast.LENGTH_LONG).show();
+				
+				BitmapDownloaderTask task = new BitmapDownloaderTask();
+				task.execute();
+				
+//				Toast.makeText(context, json.getString("info"),
+//						Toast.LENGTH_LONG).show();
 			} catch (Exception e) {
 				Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG)
 						.show();

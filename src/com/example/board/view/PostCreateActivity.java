@@ -27,7 +27,9 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -56,6 +58,8 @@ public class PostCreateActivity extends SherlockActivity {
 	int mImageHeight = 0;
 	int newImageWidth = 400;
 	int newImageHeight = 400;
+	int targetImage_num;
+	int imageNum = 0;
 	float scaleWidth = 0;
 	float scaleHeight = 0;
 
@@ -63,10 +67,50 @@ public class PostCreateActivity extends SherlockActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_create);
-
+		
 		addItemsOnSpinner();
+		
+		Button addImageBtn = (Button)findViewById(R.id.addImageBtn);
+		
+		addImageBtn.setOnClickListener(new addImageBtnListener());
 
 		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
+		
+		Toast.makeText(this, "사진은 5장까지 추가가 됩니다.", 2000).show();
+	}
+	
+	private class addImageBtnListener implements OnClickListener{
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			// imageNum = 이미지 개수
+			switch (imageNum) {
+			case 0:
+				targetImage[0] = (ImageView) findViewById(R.id.targetImage1);
+				getImageFromGallery(0);
+				break;
+			case 1:
+				targetImage[1] = (ImageView) findViewById(R.id.targetImage2);
+				getImageFromGallery(1);
+				break;
+			case 2:
+				targetImage[2] = (ImageView) findViewById(R.id.targetImage3);
+				getImageFromGallery(2);
+				break;
+			case 3:
+				targetImage[3] = (ImageView) findViewById(R.id.targetImage4);
+				getImageFromGallery(3);
+				break;
+			case 4:
+				targetImage[4] = (ImageView) findViewById(R.id.targetImage5);
+				getImageFromGallery(4);
+				break;
+			case 5:
+				Toast.makeText(v.getContext(), "사진은 5개까지 추가가 가능합니다.", 2000).show();
+			}
+		}
+		
 	}
 
 	@Override
@@ -80,9 +124,8 @@ public class PostCreateActivity extends SherlockActivity {
 			try {
 				bitmap = BitmapFactory.decodeStream(getContentResolver()
 						.openInputStream(targetUri));
-				int tartgetImage_num = data.getIntExtra("targetImage_num", 0);
 				
-				targetImage[tartgetImage_num].setImageResource(0);
+				targetImage[targetImage_num].setImageResource(0);
 
 				mImageWidth = bitmap.getWidth();
 				mImageHeight = bitmap.getHeight();
@@ -96,14 +139,18 @@ public class PostCreateActivity extends SherlockActivity {
 				Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
 						mImageWidth, mImageHeight, matrix, true);
 
-				targetImage[tartgetImage_num].setImageBitmap(resizedBitmap);
+				targetImage[targetImage_num].setImageBitmap(resizedBitmap);
+				
+				targetImage[targetImage_num].setVisibility(ImageView.VISIBLE);
+				
+				imageNum++;
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-
+	
 	public boolean imageListener(View image) {
 		switch (image.getId()) {
 		case R.id.targetImage1:
@@ -131,10 +178,10 @@ public class PostCreateActivity extends SherlockActivity {
 		return true;
 	}
 
-	public void getImageFromGallery(int targetImage_num) {
+	public void getImageFromGallery(int image_num) {
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		intent.putExtra("targetImage_num", targetImage_num);
+		targetImage_num = image_num;
 		startActivityForResult(intent, 0);
 	}
 
@@ -176,21 +223,27 @@ public class PostCreateActivity extends SherlockActivity {
 			JSONObject taskObj = new JSONObject();
 			String response = null;
 			JSONObject json = new JSONObject();
-
-			ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
-			targetImage[0] = (ImageView) findViewById(R.id.targetImage1);
-			targetImage[1] = (ImageView) findViewById(R.id.targetImage1);
-			targetImage[2] = (ImageView) findViewById(R.id.targetImage1);
-			targetImage[3] = (ImageView) findViewById(R.id.targetImage1);
-			targetImage[4] = (ImageView) findViewById(R.id.targetImage1);
 			
-			for(int i = 0 ; i < 5 ; i ++){
+			targetImage[0] = (ImageView) findViewById(R.id.targetImage1);
+			targetImage[1] = (ImageView) findViewById(R.id.targetImage2);
+			targetImage[2] = (ImageView) findViewById(R.id.targetImage3);
+			targetImage[3] = (ImageView) findViewById(R.id.targetImage4);
+			targetImage[4] = (ImageView) findViewById(R.id.targetImage5);
+			
+			for(int i = 0 ; i < imageNum ; i++){
+				ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
 				BitmapDrawable drawable = (BitmapDrawable) targetImage[i]
 						.getDrawable();
 				Bitmap imageBitmap = drawable.getBitmap();
 				imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageStream);
 				byte[] data = imageStream.toByteArray();
 				imageData[i] = new String(Base64.encode(data, 1));
+				try {
+					imageStream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			try {
@@ -256,10 +309,7 @@ public class PostCreateActivity extends SherlockActivity {
 	public void addItemsOnSpinner() {
 		category = (Spinner) findViewById(R.id.postCategory);
 		List<String> list = new ArrayList<String>();
-		list.add("팝니다");
-		list.add("삽니다");
-		list.add("판매 완료");
-		list.add("문의 및 견적의뢰");
+		list.add(getIntent().getStringExtra("category"));
 		
 		ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, list);

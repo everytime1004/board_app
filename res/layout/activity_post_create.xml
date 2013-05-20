@@ -35,6 +35,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <Button
+            android:id="@+id/addImageBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/addImageBtnText" >
+        </Button>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +54,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="imageListener"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcher"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/targetImage2"
@@ -54,7 +63,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="imageListener"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcher"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/targetImage3"
@@ -62,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="imageListener"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcher"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/targetImage4"
@@ -70,7 +81,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="imageListener"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcher"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/targetImage5"
@@ -78,7 +90,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="imageListener"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcher"
+                android:visibility="invisible" />
         </LinearLayout>
 
         <Button

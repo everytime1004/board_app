@@ -22,7 +22,7 @@ public class HomeActivity extends SherlockActivity {
 	private SharedPreferences mPreferences;
 
 	private String regId = null;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -36,10 +36,10 @@ public class HomeActivity extends SherlockActivity {
 					| ActionBar.NAVIGATION_MODE_STANDARD
 					| ActionBar.DISPLAY_HOME_AS_UP
 					| ActionBar.DISPLAY_SHOW_HOME);
-			
+
 			mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 		}
-		GCMRegistrar.unregister(this);
+
 		registGCM();
 
 	}
@@ -50,11 +50,10 @@ public class HomeActivity extends SherlockActivity {
 		getSupportMenuInflater().inflate(R.menu.home, menu);
 
 		if (mPreferences.contains("AuthToken")) {
-			menu.findItem(R.id.action_logout).setVisible(true);
-			menu.findItem(R.id.action_login).setVisible(false);
+			menu.findItem(R.id.action_auth).setTitle("로그 아웃");
+
 		} else {
-			menu.findItem(R.id.action_logout).setVisible(false);
-			menu.findItem(R.id.action_login).setVisible(true);
+			menu.findItem(R.id.action_auth).setTitle("로그인");
 		}
 
 		return true;
@@ -63,28 +62,22 @@ public class HomeActivity extends SherlockActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.action_login:
-			Intent loginIntent = new Intent(this, AuthActivity.class);
-			startActivity(loginIntent);
-			break;
+		case R.id.action_auth:
+			if (item.getTitle().equals("로그인")) {
+				Intent loginIntent = new Intent(this, AuthActivity.class);
+				startActivity(loginIntent);
+				break;
+			} else {
+				SharedPreferences.Editor editor = mPreferences.edit();
+				// save the returned auth_token into
+				// the SharedPreferences
+				editor.clear();
+				editor.commit();
+				
+				item.setTitle("로그인");
+				break;
+			}
 
-		case R.id.action_logout:
-			SharedPreferences.Editor editor = mPreferences.edit();
-			// save the returned auth_token into
-			// the SharedPreferences
-			editor.clear();
-			editor.commit();
-
-			Intent logoutIntent = new Intent(this, HomeActivity.class);
-			startActivity(logoutIntent);
-			finish();
-			break;
-			
-		case R.id.action_create_task:
-			Intent createTaskIntent = new Intent(this, PostCreateActivity.class);
-			startActivity(createTaskIntent);
-			break;
-			
 		case R.id.action_setting:
 			Intent settingIntent = new Intent(this, SettingActivity.class);
 			startActivity(settingIntent);
@@ -105,7 +98,7 @@ public class HomeActivity extends SherlockActivity {
 		}
 
 		/* GCM Local state */
-		GCMRegistrar.onDestroy(this);
+		GCMRegistrar.onDestroy(getApplicationContext());
 	}
 
 	AsyncTask<Void, Void, Void> gcmRegisterTask;
@@ -120,10 +113,11 @@ public class HomeActivity extends SherlockActivity {
 		regId = GCMRegistrar.getRegistrationId(this);
 		if (regId.equals("")) {
 			// Automatically registers application on startup.
-			GCMRegistrar.register(HomeActivity.this, NetworkInfo.PROJECT_ID);
+			GCMRegistrar.register(getApplicationContext(),
+					NetworkInfo.PROJECT_ID);
 		} else {
 			// Device is already registered on GCM, check server.
-			if (GCMRegistrar.isRegisteredOnServer(HomeActivity.this)) {
+			if (GCMRegistrar.isRegisteredOnServer(getApplicationContext())) {
 			} else {
 				// Try to register again, but not in the UI thread.
 				// It's also necessary to cancel the thread onDestroy(),

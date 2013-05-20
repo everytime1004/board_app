@@ -968,12 +968,11 @@ containing a value of this type.
         public static final int abs__title=0x7f04001b;
         public static final int abs__titleDivider=0x7f04001c;
         public static final int abs__up=0x7f04000b;
+        public static final int action_auth=0x7f040057;
         public static final int action_create_task=0x7f040059;
-        public static final int action_login=0x7f040057;
-        public static final int action_logout=0x7f040058;
         public static final int action_registeration=0x7f040056;
-        public static final int action_setting=0x7f04005a;
-        public static final int action_settings=0x7f04005b;
+        public static final int action_setting=0x7f040058;
+        public static final int addImageBtn=0x7f04003a;
         public static final int boardBuyBtn=0x7f040033;
         public static final int boardInquiryBtn=0x7f040036;
         public static final int boardSellBtn=0x7f040034;
@@ -981,7 +980,6 @@ containing a value of this type.
         public static final int disableHome=0x7f040009;
         public static final int edit_query=0x7f040027;
         public static final int homeAsUp=0x7f040006;
-        public static final int imageShowBtn=0x7f040043;
         public static final int listMode=0x7f040002;
         public static final int loginButton=0x7f040053;
         public static final int normal=0x7f040001;
@@ -992,10 +990,10 @@ containing a value of this type.
         public static final int phone_third=0x7f04004f;
         public static final int postCategory=0x7f040039;
         public static final int postDescription=0x7f040038;
-        public static final int postLv=0x7f040040;
+        public static final int postLv=0x7f040041;
         public static final int postTitle=0x7f040037;
         public static final int registerButton=0x7f040050;
-        public static final int saveTaskButton=0x7f04003f;
+        public static final int saveTaskButton=0x7f040040;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showImage1=0x7f040044;
@@ -1005,14 +1003,14 @@ containing a value of this type.
         public static final int showImage5=0x7f040048;
         public static final int showTitle=0x7f040007;
         public static final int tabMode=0x7f040003;
-        public static final int targetImage1=0x7f04003a;
-        public static final int targetImage2=0x7f04003b;
-        public static final int targetImage3=0x7f04003c;
-        public static final int targetImage4=0x7f04003d;
-        public static final int targetImage5=0x7f04003e;
+        public static final int targetImage1=0x7f04003b;
+        public static final int targetImage2=0x7f04003c;
+        public static final int targetImage3=0x7f04003d;
+        public static final int targetImage4=0x7f04003e;
+        public static final int targetImage5=0x7f04003f;
         public static final int task_category=0x7f040055;
-        public static final int task_show_description=0x7f040042;
-        public static final int task_show_title=0x7f040041;
+        public static final int task_show_description=0x7f040043;
+        public static final int task_show_title=0x7f040042;
         public static final int task_title=0x7f040054;
         public static final int useLogo=0x7f040004;
         public static final int userEmail=0x7f040049;
@@ -1062,8 +1060,7 @@ containing a value of this type.
     public static final class menu {
         public static final int auth=0x7f0b0000;
         public static final int home=0x7f0b0001;
-        public static final int post_show=0x7f0b0002;
-        public static final int show=0x7f0b0003;
+        public static final int show=0x7f0b0002;
     }
     public static final class string {
         public static final int LoginPoasswordHint=0x7f090022;
@@ -1113,6 +1110,7 @@ containing a value of this type.
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f090009;
         public static final int action_settings=0x7f090010;
+        public static final int addImageBtnText=0x7f090023;
         public static final int app_name=0x7f09000f;
         public static final int boardBuyBtnText=0x7f090015;
         public static final int boardInquiryBtnText=0x7f090017;

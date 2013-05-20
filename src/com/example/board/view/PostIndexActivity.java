@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.example.board.R;
 import com.example.board.lib.UrlJsonAsyncTask;
 import com.example.board.model.NetworkInfo;
@@ -48,7 +50,7 @@ public class PostIndexActivity extends SherlockActivity {
 		}
 
 	}
-	
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
@@ -84,7 +86,8 @@ public class PostIndexActivity extends SherlockActivity {
 				for (int i = 0; i < length; i++) {
 					jsonTask = jsonTasks.getJSONObject(i);
 
-					if (category.equals(jsonTask.getString("category")) || jsonTask.getString("category").equals("공지사항")) {
+					if (category.equals(jsonTask.getString("category"))
+							|| jsonTask.getString("category").equals("공지사항")) {
 
 						tasksArray.add(new Post(jsonTask.getInt("id"), jsonTask
 								.getString("title"), jsonTask
@@ -123,5 +126,26 @@ public class PostIndexActivity extends SherlockActivity {
 			startActivity(intent);
 
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getSupportMenuInflater().inflate(R.menu.show, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_create_task:
+			Intent createTaskIntent = new Intent(this, PostCreateActivity.class);
+			createTaskIntent.putExtra("category", mCategory);
+			startActivity(createTaskIntent);
+			break;
+		}
+		
+		return true;
 	}
 }

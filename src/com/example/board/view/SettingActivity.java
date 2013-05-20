@@ -18,7 +18,7 @@ public class SettingActivity extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
 
-		mPreferences = getSharedPreferences("noty", MODE_PRIVATE);
+		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 	}
 
 	public void saveSettings(View button) {
