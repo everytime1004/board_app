@@ -1,14 +1,12 @@
 package com.example.board.view;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,6 +27,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.example.board.R;
+import com.example.board.controller.CacheManager;
 import com.example.board.lib.UrlJsonAsyncTask;
 import com.example.board.model.NetworkInfo;
 
@@ -69,7 +68,7 @@ public class PostShowActivity extends SherlockActivity {
 		task_show_description.setText(taskIntent.getStringExtra("description"));
 		mPostId = taskIntent.getIntExtra("post_id", 0);
 
-		SHOW_TASK_ENDPOINT_URL = "http://" + NetworkInfo.IP + "/api/v1/posts/"
+		SHOW_TASK_ENDPOINT_URL = NetworkInfo.IP + "/api/v1/posts/"
 				+ mPostId + ".json";
 
 		ShowTaskTask showTask = new ShowTaskTask(PostShowActivity.this);
@@ -155,7 +154,7 @@ public class PostShowActivity extends SherlockActivity {
 		}
 	}
 
-	static Bitmap downloadBitmap(String url) {
+	Bitmap downloadBitmap(String url) {
 		final AndroidHttpClient client = AndroidHttpClient
 				.newInstance("Android");
 		String totalURL = null;
@@ -169,6 +168,17 @@ public class PostShowActivity extends SherlockActivity {
 			totalURL = splitURL[0] + "//" + splitURL[2] + "/" + splitURL[3]
 					+ "/" + splitURL[4] + "/" + lastEncodeURL;
 		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			Bitmap bitmap = null;
+			if(CacheManager.retrieveData(getApplicationContext(), totalURL) != null){
+				bitmap = CacheManager.retrieveData(getApplicationContext(), totalURL);
+				return bitmap;
+			}
+		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -186,7 +196,9 @@ public class PostShowActivity extends SherlockActivity {
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inSampleSize = 2;
 			final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
+			
+			CacheManager.cacheData(getApplicationContext(), bitmap, totalURL);
+			
 			return bitmap;
 
 //			HttpResponse response = client.execute(getRequest);
@@ -227,5 +239,4 @@ public class PostShowActivity extends SherlockActivity {
 		}
 		return null;
 	}
-
 }

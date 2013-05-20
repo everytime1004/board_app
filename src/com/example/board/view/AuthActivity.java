@@ -35,11 +35,6 @@ public class AuthActivity extends SherlockActivity {
 
 	private SharedPreferences mPreferences;
 
-	private final static String LOGIN_API_ENDPOINT_URL = "http://"
-			+ NetworkInfo.IP + "/api/v1/sessions.json";
-	private final static String REGISTER_API_ENDPOINT_URL = "http://"
-			+ NetworkInfo.IP + "/api/v1/registrations";
-
 	private String mUserEmail;
 	private String mUserName;
 	private String mUserPassword;
@@ -146,7 +141,7 @@ public class AuthActivity extends SherlockActivity {
 				// everything is ok!
 				RegisterTask registerTask = new RegisterTask(AuthActivity.this);
 				registerTask.setMessageLoading("Registering new account...");
-				registerTask.execute(REGISTER_API_ENDPOINT_URL);
+				registerTask.execute(NetworkInfo.REGISTER_API_ENDPOINT_URL);
 			}
 		}
 	}
@@ -167,7 +162,7 @@ public class AuthActivity extends SherlockActivity {
 			LoginTask loginTask = new LoginTask(AuthActivity.this);
 			loginTask.setMessageLoading("Logging in...");
 			loginTask.setAuthToken(mPreferences.getString("AuthToken", ""));
-			loginTask.execute(LOGIN_API_ENDPOINT_URL);
+			loginTask.execute(NetworkInfo.LOGIN_API_ENDPOINT_URL);
 		}
 
 	}
@@ -336,6 +331,7 @@ public class AuthActivity extends SherlockActivity {
 					Intent intent = new Intent(getApplicationContext(),
 							HomeActivity.class);
 					startActivity(intent);
+					finish();
 				}
 				Toast.makeText(context, json.getString("info"),
 						Toast.LENGTH_LONG).show();
@@ -346,7 +342,6 @@ public class AuthActivity extends SherlockActivity {
 						.show();
 			} finally {
 				super.onPostExecute(json);
-				finish();
 			}
 		}
 	}

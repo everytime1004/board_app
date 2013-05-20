@@ -26,9 +26,6 @@ import com.example.board.model.PostAdapter;
 
 public class PostIndexActivity extends SherlockActivity {
 
-	private static final String TASKS_URL = "http://" + NetworkInfo.IP
-			+ "/api/v1/posts.json";
-
 	private SharedPreferences mPreferences;
 
 	private String mCategory = null;
@@ -43,7 +40,7 @@ public class PostIndexActivity extends SherlockActivity {
 		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 
 		if (mPreferences.contains("AuthToken")) {
-			loadPostFromServer(TASKS_URL, mCategory);
+			loadPostFromServer(NetworkInfo.TASKS_URL, mCategory);
 		} else {
 			Toast.makeText(this, "로그인을 먼저 해주세요", 2000).show();
 			finish();
@@ -145,7 +142,7 @@ public class PostIndexActivity extends SherlockActivity {
 			startActivity(createTaskIntent);
 			break;
 		}
-		
+
 		return true;
 	}
 }

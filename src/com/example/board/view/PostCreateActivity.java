@@ -45,8 +45,6 @@ public class PostCreateActivity extends SherlockActivity {
 	ImageView[] targetImage = new ImageView[5];
 	String[] imageData = new String[5];
 
-	private final static String CREATE_TASK_ENDPOINT_URL = "http://"
-			+ NetworkInfo.IP + "/api/v1/posts.json";
 	private SharedPreferences mPreferences;
 	private String mPostTitle;
 	private String mPostDescription;
@@ -206,7 +204,7 @@ public class PostCreateActivity extends SherlockActivity {
 			CreateTaskTask createTask = new CreateTaskTask(PostCreateActivity.this);
 			createTask.setMessageLoading("Creating new task...");
 			createTask.setAuthToken(mPreferences.getString("AuthToken", ""));
-			createTask.execute(CREATE_TASK_ENDPOINT_URL);
+			createTask.execute(NetworkInfo.CREATE_TASK_ENDPOINT_URL);
 		}
 	}
 
