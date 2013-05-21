@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 public class CacheManager {
 
@@ -28,28 +30,43 @@ public class CacheManager {
 		if (newSize > MAX_SIZE) {
 			cleanDir(cacheDir, newSize - MAX_SIZE);
 		}
-
-		File file = new File(cacheDir, name);
-		FileOutputStream os = new FileOutputStream(file);
+		
+		String[] imageCheckSplit = new String[5];
+		imageCheckSplit = name.split("_");
+		
+		String imageCheck = imageCheckSplit[2]+imageCheckSplit[3]+imageCheckSplit[4];
+		
+		File cacheImage = new File(cacheDir.getAbsolutePath(), imageCheck);
+		OutputStream os = new FileOutputStream(cacheImage.getAbsolutePath());
 		try {
 			bitmap.compress(CompressFormat.JPEG, 100, os);
 		} finally {
-			os.flush();
-			os.close();
+			try {
+				os.flush();
+				os.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public static Bitmap retrieveData(Context context, String name)
 			throws IOException {
-
+		
+		String[] imageCheckSplit = new String[5];
+		imageCheckSplit = name.split("_");
+		
+		String imageCheck = imageCheckSplit[2]+imageCheckSplit[3]+imageCheckSplit[4];
+		
 		File cacheDir = context.getCacheDir();
-		File file = new File(cacheDir, name);
-
+		File file = new File(cacheDir, imageCheck);
+	
 		if (!file.exists()) {
 			// Data doesn't exist
+			Log.d("retrieveData","before return null");
 			return null;
 		}
-
+	
 		byte[] data = new byte[(int) file.length()];
 		FileInputStream is = new FileInputStream(file);
 		try {
@@ -57,9 +74,10 @@ public class CacheManager {
 		} finally {
 			is.close();
 		}
-		
+	
 		Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-
+		
+		Log.d("retrieveData","before return bitmap");
 		return bitmap;
 	}
 

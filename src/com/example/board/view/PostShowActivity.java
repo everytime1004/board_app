@@ -1,5 +1,6 @@
 package com.example.board.view;
 
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -68,8 +69,8 @@ public class PostShowActivity extends SherlockActivity {
 		task_show_description.setText(taskIntent.getStringExtra("description"));
 		mPostId = taskIntent.getIntExtra("post_id", 0);
 
-		SHOW_TASK_ENDPOINT_URL = NetworkInfo.IP + "/api/v1/posts/"
-				+ mPostId + ".json";
+		SHOW_TASK_ENDPOINT_URL = NetworkInfo.IP + "/api/v1/posts/" + mPostId
+				+ ".json";
 
 		ShowTaskTask showTask = new ShowTaskTask(PostShowActivity.this);
 		showTask.setMessageLoading("Loading task...");
@@ -139,12 +140,12 @@ public class PostShowActivity extends SherlockActivity {
 						imageBitMapURL[i] = image;
 					}
 				}
-				
+
 				BitmapDownloaderTask task = new BitmapDownloaderTask();
 				task.execute();
-				
-//				Toast.makeText(context, json.getString("info"),
-//						Toast.LENGTH_LONG).show();
+
+				// Toast.makeText(context, json.getString("info"),
+				// Toast.LENGTH_LONG).show();
 			} catch (Exception e) {
 				Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG)
 						.show();
@@ -158,6 +159,7 @@ public class PostShowActivity extends SherlockActivity {
 		final AndroidHttpClient client = AndroidHttpClient
 				.newInstance("Android");
 		String totalURL = null;
+		Bitmap bitmap = null;
 
 		try {
 			String[] splitURL = null;
@@ -171,11 +173,12 @@ public class PostShowActivity extends SherlockActivity {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		try {
-			Bitmap bitmap = null;
-			if(CacheManager.retrieveData(getApplicationContext(), totalURL) != null){
-				bitmap = CacheManager.retrieveData(getApplicationContext(), totalURL);
+			if (CacheManager.retrieveData(getApplicationContext(), totalURL) != null) {
+				bitmap = CacheManager.retrieveData(getApplicationContext(),
+						totalURL);
+				Log.d("CacheMemory", "Image in Cache Memory");
 				return bitmap;
 			}
 		} catch (IOException e1) {
@@ -186,46 +189,45 @@ public class PostShowActivity extends SherlockActivity {
 		final HttpGet getRequest = new HttpGet(totalURL);
 
 		try {
-
-			URL imageUrl = new URL(totalURL);
-			URLConnection connection = imageUrl.openConnection();
-			connection.setUseCaches(true);
-
-			InputStream inputStream = connection.getInputStream();
-
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inSampleSize = 2;
-			final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+			 URL imageUrl = new URL(totalURL);
+			 URLConnection connection = imageUrl.openConnection();
+			 connection.setUseCaches(true);
 			
+			 InputStream inputStream = connection.getInputStream();
+			
+			 BitmapFactory.Options options = new BitmapFactory.Options();
+			 options.inSampleSize = 1;
+			 bitmap = BitmapFactory.decodeStream(inputStream);
+
 			CacheManager.cacheData(getApplicationContext(), bitmap, totalURL);
-			
+
 			return bitmap;
 
-//			HttpResponse response = client.execute(getRequest);
-//			final int statusCode = response.getStatusLine().getStatusCode();
-//			if (statusCode != HttpStatus.SC_OK) {
-//				Log.w("ImageDownloader", "Error " + statusCode
-//						+ " while retrieving bitmap from " + url);
-//				return null;
-//			}
-//
-//			final HttpEntity entity = response.getEntity();
-//			if (entity != null) {
-//				InputStream inputStream = null;
-//				try {
-//					inputStream = entity.getContent();
-//					BitmapFactory.Options options = new BitmapFactory.Options();
-//					options.inSampleSize = 2;
-//					final Bitmap bitmap = BitmapFactory
-//							.decodeStream(inputStream);
-//					return bitmap;
-//				} finally {
-//					if (inputStream != null) {
-//						inputStream.close();
-//					}
-//					entity.consumeContent();
-//				}
-//			}
+			// HttpResponse response = client.execute(getRequest);
+			// final int statusCode = response.getStatusLine().getStatusCode();
+			// if (statusCode != HttpStatus.SC_OK) {
+			// Log.w("ImageDownloader", "Error " + statusCode
+			// + " while retrieving bitmap from " + url);
+			// return null;
+			// }
+			//
+			// final HttpEntity entity = response.getEntity();
+			// if (entity != null) {
+			// InputStream inputStream = null;
+			// try {
+			// inputStream = entity.getContent();
+			// BitmapFactory.Options options = new BitmapFactory.Options();
+			// options.inSampleSize = 2;
+			// final Bitmap bitmap = BitmapFactory
+			// .decodeStream(inputStream);
+			// return bitmap;
+			// } finally {
+			// if (inputStream != null) {
+			// inputStream.close();
+			// }
+			// entity.consumeContent();
+			// }
+			// }
 		} catch (Exception e) {
 			// Could provide a more explicit error message for IOException or
 			// IllegalStateException

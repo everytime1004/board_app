@@ -1,7 +1,8 @@
 package com.example.board.model;
 
 public class NetworkInfo {
-	public static final String IP = "http://boardgeneration.herokuapp.com";
+	public static final String IP = "http://192.168.11.5:3000";
+//	public static final String IP = "http://boardgeneration.herokuapp.com";
 
 	public static final String PROJECT_ID = "43944975330";
 

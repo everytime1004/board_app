@@ -242,7 +242,6 @@ public class AuthActivity extends SherlockActivity {
 					Intent intent = new Intent(AuthActivity.this,
 							HomeActivity.class);
 					startActivity(intent);
-					finish();
 				}
 				Toast.makeText(context, json.getString("info"),
 						Toast.LENGTH_LONG).show();
@@ -253,6 +252,7 @@ public class AuthActivity extends SherlockActivity {
 						.show();
 			} finally {
 				super.onPostExecute(json);
+				finish();
 			}
 		}
 	}
@@ -330,8 +330,8 @@ public class AuthActivity extends SherlockActivity {
 					// launch the HomeActivity and close this one
 					Intent intent = new Intent(getApplicationContext(),
 							HomeActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
-					finish();
 				}
 				Toast.makeText(context, json.getString("info"),
 						Toast.LENGTH_LONG).show();
@@ -342,6 +342,7 @@ public class AuthActivity extends SherlockActivity {
 						.show();
 			} finally {
 				super.onPostExecute(json);
+				finish();
 			}
 		}
 	}

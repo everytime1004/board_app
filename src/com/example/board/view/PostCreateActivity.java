@@ -290,8 +290,8 @@ public class PostCreateActivity extends SherlockActivity {
 				if (json.getBoolean("success")) {
 					Intent intent = new Intent(getApplicationContext(),
 							HomeActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
-					finish();
 				}
 				Toast.makeText(context, json.getString("info"),
 						Toast.LENGTH_LONG).show();
@@ -300,6 +300,7 @@ public class PostCreateActivity extends SherlockActivity {
 						.show();
 			} finally {
 				super.onPostExecute(json);
+				finish();
 			}
 		}
 	}
