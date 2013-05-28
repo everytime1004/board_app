@@ -1,46 +1,58 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".HomeActivity" >
 
-    <Button
-        android:id="@+id/boardBuyBtn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:onClick="showBoard"
-        android:text="@string/boardBuyBtnText" />
+        android:orientation="horizontal"
+        android:weightSum="2" >
 
-    <Button
-        android:id="@+id/boardSellBtn"
-        android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/boardBuyBtn"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:onClick="showBoard"
+            android:text="@string/boardBuyBtnText" />
+
+        <Button
+            android:id="@+id/boardSellBtn"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:onClick="showBoard"
+            android:text="@string/boardSellBtnText" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/boardBuyBtn"
-        android:layout_centerHorizontal="true"
-        android:onClick="showBoard"
-        android:text="@string/boardSellBtnText" />
+        android:orientation="horizontal"
+        android:weightSum="2" >
 
-    <Button
-        android:id="@+id/boardSellCompleteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/boardSellBtn"
-        android:layout_centerHorizontal="true"
-        android:onClick="showBoard"
-        android:text="@string/boardSellCompleteBtnText" />
+        <Button
+            android:id="@+id/boardSellCompleteBtn"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:onClick="showBoard"
+            android:text="@string/boardSellCompleteBtnText" />
 
-    <Button
-        android:id="@+id/boardInquiryBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/boardSellCompleteBtn"
-        android:layout_centerHorizontal="true"
-        android:onClick="showBoard"
-        android:text="@string/boardInquiryBtnText" />
+        <Button
+            android:id="@+id/boardInquiryBtn"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:onClick="showBoard"
+            android:text="@string/boardInquiryBtnText" />
+    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
