@@ -135,10 +135,15 @@ public class PostShowActivity extends SherlockActivity {
 					int length = jsonTasks.length();
 					for (int i = 0; i < length; i++) {
 						String image = jsonTasks.getString(i);
-						
-						if(image.contains("fallback/default.png")){
+
+						if (image.contains("fallback/default.png")) {
 							throw new Exception("사진이 없습니다");
 						}
+						/*
+						 * 만약 글에 사진이 없으면 default 이미지가 넘어오는데 default를 지정해주지 않았으므로
+						 * url이 없고 bitmap 다운로드할 때 에러가 발생해서 거기서 httl close 등 못하고
+						 * 죽어버리므로 leak 발생해서 앱이 죽어버림
+						 */
 
 						imageBitMapURL[i] = image;
 					}
@@ -171,7 +176,8 @@ public class PostShowActivity extends SherlockActivity {
 			String lastEncodeURL = encodeURL.split("%2F")[8];
 
 			totalURL = splitURL[0] + "//" + splitURL[2] + "/" + splitURL[3]
-					+ "/" + splitURL[4] + "/" + splitURL[5] + "/" + splitURL[6] + "/" + splitURL[7] + "/" + "thumb_" + lastEncodeURL;
+					+ "/" + splitURL[4] + "/" + splitURL[5] + "/" + splitURL[6]
+					+ "/" + splitURL[7] + "/" + "thumb_" + lastEncodeURL;
 		} catch (UnsupportedEncodingException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -192,15 +198,15 @@ public class PostShowActivity extends SherlockActivity {
 		final HttpGet getRequest = new HttpGet(totalURL);
 
 		try {
-			 URL imageUrl = new URL(totalURL);
-			 URLConnection connection = imageUrl.openConnection();
-			 connection.setUseCaches(true);
-			
-			 InputStream inputStream = connection.getInputStream();
-			
-			 BitmapFactory.Options options = new BitmapFactory.Options();
-			 options.inSampleSize = 1;
-			 bitmap = BitmapFactory.decodeStream(inputStream);
+			URL imageUrl = new URL(totalURL);
+			URLConnection connection = imageUrl.openConnection();
+			connection.setUseCaches(true);
+
+			InputStream inputStream = connection.getInputStream();
+
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inSampleSize = 1;
+			bitmap = BitmapFactory.decodeStream(inputStream);
 
 			CacheManager.cacheData(getApplicationContext(), bitmap, totalURL);
 
