@@ -126,15 +126,21 @@ public class AuthActivity extends SherlockActivity {
 				|| mUserPassword.length() == 0
 				|| mUserPasswordConfirmation.length() == 0) {
 			// input fields are empty
-			Toast.makeText(this, "Please complete all the fields",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "빈 값을 모두 입력해주세요.", Toast.LENGTH_LONG).show();
+			return;
+		} else if (mUserName.length() < 3 || mUserName.length() > 13) {
+			Toast.makeText(this, "이름은 3자이상 13자 이하를 입력해주세요.", Toast.LENGTH_LONG)
+					.show();
 			return;
 		} else {
 			if (!mUserPassword.equals(mUserPasswordConfirmation)) {
 				// password doesn't match confirmation
-				Toast.makeText(
-						this,
-						"Your password doesn't match confirmation, check again",
+				Toast.makeText(this, "패스워드가 일치하지 않습니다. 다시 입력해주세요.",
+						Toast.LENGTH_LONG).show();
+				return;
+			} else if (mUserPassword.length() < 4
+					|| mUserPassword.length() > 20) {
+				Toast.makeText(this, "패스워드는 4자이상 20자 이하를 입력해주세요.",
 						Toast.LENGTH_LONG).show();
 				return;
 			} else {
@@ -149,18 +155,17 @@ public class AuthActivity extends SherlockActivity {
 	public void login(View v) {
 
 		EditText userEmailField = (EditText) findViewById(R.id.userEmail);
-		mUserName = userEmailField.getText().toString();
+		mUserEmail = userEmailField.getText().toString();
 		EditText userPasswordField = (EditText) findViewById(R.id.userPassword);
 		mUserPassword = userPasswordField.getText().toString();
 
-		if (mUserName.length() == 0 || mUserPassword.length() == 0) {
+		if (mUserEmail.length() == 0 || mUserPassword.length() == 0) {
 			// input fields are empty
-			Toast.makeText(this, "Please complete all the fields",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "빈 값을 입력해주세요", Toast.LENGTH_LONG).show();
 			return;
 		} else {
 			LoginTask loginTask = new LoginTask(AuthActivity.this);
-			loginTask.setMessageLoading("Logging in...");
+			loginTask.setMessageLoading("로그인 중...");
 			loginTask.setAuthToken(mPreferences.getString("AuthToken", ""));
 			loginTask.execute(NetworkInfo.LOGIN_API_ENDPOINT_URL);
 		}
@@ -187,7 +192,6 @@ public class AuthActivity extends SherlockActivity {
 					// something goes wrong
 					json.put("success", false);
 					json.put("info", "Something went wrong. Retry!");
-
 					// add the users's info to the post params
 					userObj.put("email", mUserEmail);
 					userObj.put("name", mUserName);
@@ -200,7 +204,8 @@ public class AuthActivity extends SherlockActivity {
 					userObj.put("phone", mPhone_first + mPhone_second
 							+ mPhone_third);
 					holder.put("user", userObj);
-					StringEntity se = new StringEntity(holder.toString());
+					StringEntity se = new StringEntity(holder.toString(),
+							"utf-8");
 					post.setEntity(se);
 
 					// setup the request headers
@@ -241,10 +246,24 @@ public class AuthActivity extends SherlockActivity {
 					// launch the HomeActivity and close this one
 					Intent intent = new Intent(AuthActivity.this,
 							HomeActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
+					
+					Toast.makeText(context, json.getString("info"),
+							Toast.LENGTH_LONG).show();
+				} else {
+					String existEmail = "";
+					String invalidName = "";
+					if (json.getJSONObject("info").has("email")) {
+						existEmail = "이메일이 이미 존재합니다.";
+						if (json.getJSONObject("info").has("name")) {
+							invalidName = "이름이 존재하거나 유효하지 않는 이름입니다.(특수문자를 빼주세요)";
+						}
+						Toast.makeText(context,
+								existEmail + "\n" + invalidName,
+								Toast.LENGTH_LONG).show();
+					}
 				}
-				Toast.makeText(context, json.getString("info"),
-						Toast.LENGTH_LONG).show();
 			} catch (Exception e) {
 				// something went wrong: show a Toast
 				// with the exception message
@@ -282,11 +301,12 @@ public class AuthActivity extends SherlockActivity {
 					json.put("info", "Something went wrong. Retry!");
 					// add the user email and password to
 					// the params
-					userObj.put("name", mUserName);
+					userObj.put("email", mUserEmail);
 					userObj.put("password", mUserPassword);
 					holder.put("user", userObj);
 					// http://rootnode.tistory.com/entry/StringEntity 한글 꺠질 때
-					StringEntity se = new StringEntity(holder.toString());
+					StringEntity se = new StringEntity(holder.toString(),
+							"utf-8");
 					post.setEntity(se);
 
 					// setup the request headers
@@ -300,8 +320,7 @@ public class AuthActivity extends SherlockActivity {
 				} catch (HttpResponseException e) {
 					e.printStackTrace();
 					Log.e("ClientProtocol", "" + e);
-					json.put("info",
-							"UserName and/or password are invalid. Retry!");
+					json.put("info", "이메일이나 패스워드가 일치하지 않습니다.");
 				} catch (IOException e) {
 					e.printStackTrace();
 					Log.e("IO", "" + e);

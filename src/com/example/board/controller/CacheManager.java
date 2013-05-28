@@ -31,10 +31,10 @@ public class CacheManager {
 			cleanDir(cacheDir, newSize - MAX_SIZE);
 		}
 		
-		String[] imageCheckSplit = new String[5];
-		imageCheckSplit = name.split("_");
+		String[] imageCheckSplit = new String[8];
+		imageCheckSplit = name.split("/");
 		
-		String imageCheck = imageCheckSplit[2]+imageCheckSplit[3]+imageCheckSplit[4];
+		String imageCheck = imageCheckSplit[7]+imageCheckSplit[8];
 		
 		File cacheImage = new File(cacheDir.getAbsolutePath(), imageCheck);
 		OutputStream os = new FileOutputStream(cacheImage.getAbsolutePath());
@@ -53,10 +53,13 @@ public class CacheManager {
 	public static Bitmap retrieveData(Context context, String name)
 			throws IOException {
 		
-		String[] imageCheckSplit = new String[5];
-		imageCheckSplit = name.split("_");
+		String[] imageCheckSplit = new String[8];
+		// http://172.30.1.19:3000/system/uploads/photo/image/4/thumb_Hydrangeas.jpg 전체 경로 예
+		imageCheckSplit = name.split("/");
+		// '/'로 split해서 id값과 파일명을 불러와서 키값으로 이용 
 		
-		String imageCheck = imageCheckSplit[2]+imageCheckSplit[3]+imageCheckSplit[4];
+		String imageCheck = imageCheckSplit[7]+imageCheckSplit[8];
+		// id값과 파일명 조합해서 key값 생성
 		
 		File cacheDir = context.getCacheDir();
 		File file = new File(cacheDir, imageCheck);

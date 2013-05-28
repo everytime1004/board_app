@@ -180,6 +180,7 @@ public class PostCreateActivity extends SherlockActivity {
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		targetImage_num = image_num;
+		intent.setType("image/*");
 		startActivityForResult(intent, 0);
 	}
 

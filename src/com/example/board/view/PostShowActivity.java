@@ -1,6 +1,5 @@
 package com.example.board.view;
 
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -165,10 +164,10 @@ public class PostShowActivity extends SherlockActivity {
 			String[] splitURL = null;
 			splitURL = url.split("/");
 			String encodeURL = URLEncoder.encode(url, "UTF-8");
-			String lastEncodeURL = encodeURL.split("%2F")[5];
+			String lastEncodeURL = encodeURL.split("%2F")[8];
 
 			totalURL = splitURL[0] + "//" + splitURL[2] + "/" + splitURL[3]
-					+ "/" + splitURL[4] + "/" + lastEncodeURL;
+					+ "/" + splitURL[4] + "/" + splitURL[5] + "/" + splitURL[6] + "/" + splitURL[7] + "/" + "thumb_" + lastEncodeURL;
 		} catch (UnsupportedEncodingException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

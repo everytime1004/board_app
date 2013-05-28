@@ -37,10 +37,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onRegistered(Context context, String registrationId) {
 		Log.i(TAG, "Device registered: regId = " + registrationId);
 		
-		mPreferences = getSharedPreferences("noty", MODE_PRIVATE);
+		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 		
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putString("regId", registrationId);
+		editor.putBoolean("noty", true);
 		editor.commit();
 		
 		ServerUtilities.register(context, registrationId, mPreferences.getBoolean("noty", true));

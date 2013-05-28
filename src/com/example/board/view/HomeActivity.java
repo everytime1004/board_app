@@ -8,12 +8,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.example.board.R;
 import com.example.board.controller.GCMSendIdToServer;
+import com.example.board.controller.ServerUtilities;
 import com.example.board.model.NetworkInfo;
 import com.google.android.gcm.GCMRegistrar;
 
@@ -73,7 +75,9 @@ public class HomeActivity extends SherlockActivity {
 				// the SharedPreferences
 				editor.clear();
 				editor.commit();
-				
+
+				Toast.makeText(this, "로그아웃 되었습니다.", 2000).show();
+
 				item.setTitle("로그인");
 				break;
 			}
@@ -106,7 +110,7 @@ public class HomeActivity extends SherlockActivity {
 	private void registGCM() {
 
 		// Make sure the device has the proper dependencies.
-		GCMRegistrar.checkDevice(this);
+//		GCMRegistrar.checkDevice(this);
 		// Make sure the manifest was properly set - comment out this line
 		// while developing the app, then uncomment it when it's ready.
 		GCMRegistrar.checkManifest(this);
@@ -123,14 +127,12 @@ public class HomeActivity extends SherlockActivity {
 				// It's also necessary to cancel the thread onDestroy(),
 				// hence the use of AsyncTask instead of a raw thread.
 				final Context context = this;
+
 				gcmRegisterTask = new AsyncTask<Void, Void, Void>() {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						GCMSendIdToServer sendIdToServer = new GCMSendIdToServer(
-								context, regId);
-						sendIdToServer.setMessageLoading("GCM Register.....");
-						sendIdToServer.execute(NetworkInfo.GCM_URL);
+						ServerUtilities.register(context, regId, true);
 						return null;
 					}
 

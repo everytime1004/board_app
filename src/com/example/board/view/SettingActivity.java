@@ -37,7 +37,7 @@ public class SettingActivity extends SherlockActivity {
 			editor.commit();
 		}
 
-		ServerUtilities.register(this, mPreferences.getString("regId", ""), mPreferences.getBoolean("noty", true));
+		ServerUtilities.register(getApplicationContext(), mPreferences.getString("regId", ""), mPreferences.getBoolean("noty", true));
 
 	}
 }

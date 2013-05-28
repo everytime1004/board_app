@@ -35,8 +35,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.board.model.NetworkInfo;
 import com.google.android.gcm.GCMRegistrar;
@@ -50,6 +53,7 @@ public final class ServerUtilities {
 	private static final int MAX_ATTEMPTS = 5;
 	private static final int BACKOFF_MILLI_SECONDS = 2000;
 	private static final Random random = new Random();
+	private static AsyncTask<String, Void, JSONObject> gcmRegisterTask;
 
 	/**
 	 * Register this account/device pair within the server.
@@ -79,14 +83,13 @@ public final class ServerUtilities {
 			try {
 
 				// YSLIM : Server post
-				sendAppToServer(regId, noty);
+				sendAppToServer(context, regId, noty);
 
 				// Google API : Sets whether the device was successfully
 				// registered in the server side
 				// YSLIM : 성공적으로 등록이 되었을경우 GCM 서버에 등록확인
 				GCMRegistrar.setRegisteredOnServer(context, true);
 
-				return;
 			} catch (IOException e) {
 				// Here we are simplifying and retrying on any error; in a real
 				// application, it should retry only on unrecoverable errors
@@ -192,6 +195,8 @@ public final class ServerUtilities {
 	/**
 	 * Issue a GET request to the server.
 	 * 
+	 * @param context
+	 *            context
 	 * @param regId
 	 *            register ID
 	 * @param noty
@@ -201,43 +206,104 @@ public final class ServerUtilities {
 	 *             propagated from POST.
 	 */
 
-	private static void sendAppToServer(String regId, boolean noty)
-			throws IOException {
-		DefaultHttpClient client = new DefaultHttpClient();
-		HttpPost post = new HttpPost(NetworkInfo.GCM_URL);
-		JSONObject holder = new JSONObject();
-		JSONObject taskObj = new JSONObject();
-		String response = null;
-		JSONObject json = new JSONObject();
+	private static void sendAppToServer(final Context context,
+			final String regId, final boolean noty) throws IOException {
+		gcmRegisterTask = new AsyncTask<String, Void, JSONObject>() {
 
-		try {
-			try {
-				json.put("success", false);
-				json.put("info", "Something went wrong. Retry!");
-				taskObj.put("reg_id", regId);
-				taskObj.put("noty", noty);
+			@Override
+			protected JSONObject doInBackground(String... urls) {
+				DefaultHttpClient client = new DefaultHttpClient();
+				HttpPost post = new HttpPost(urls[0]);
+				JSONObject holder = new JSONObject();
+				JSONObject taskObj = new JSONObject();
+				String response = null;
+				JSONObject json = new JSONObject();
 
-				holder.put("gcm", taskObj);
-				StringEntity se = new StringEntity(holder.toString(), "utf-8");
-				post.setEntity(se);
-				post.setHeader("Accept", "application/json");
-				post.setHeader("Content-Type", "application/json");
+				try {
+					try {
+						json.put("success", false);
+						json.put("info", "Something went wrong. Retry!");
+						taskObj.put("reg_id", regId);
+						taskObj.put("noty", noty);
 
-				ResponseHandler<String> responseHandler = new BasicResponseHandler();
-				response = client.execute(post, responseHandler);
-				json = new JSONObject(response);
+						holder.put("gcm", taskObj);
+						StringEntity se = new StringEntity(holder.toString(),
+								"utf-8");
+						post.setEntity(se);
+						post.setHeader("Accept", "application/json");
+						post.setHeader("Content-Type", "application/json");
 
-			} catch (HttpResponseException e) {
-				e.printStackTrace();
-				Log.e("ClientProtocol", "" + e);
-			} catch (IOException e) {
-				e.printStackTrace();
-				Log.e("IO", "" + e);
+						ResponseHandler<String> responseHandler = new BasicResponseHandler();
+						response = client.execute(post, responseHandler);
+						json = new JSONObject(response);
+
+					} catch (HttpResponseException e) {
+						e.printStackTrace();
+						Log.e("ClientProtocol", "" + e);
+					} catch (IOException e) {
+						e.printStackTrace();
+						Log.e("IO", "" + e);
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+					Log.e("JSON", "" + e);
+				}
+
+				return json;
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-			Log.e("JSON", "" + e);
-		}
+
+			@Override
+			protected void onPostExecute(JSONObject json) {
+				try {
+					if (json.getBoolean("success")) {
+//						Toast.makeText(context, json.getString("info"),
+//								Toast.LENGTH_LONG).show();
+					}
+				} catch (Exception e) {
+					Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG)
+							.show();
+				} finally {
+					super.onPostExecute(json);
+				}
+			}
+
+		};
+		gcmRegisterTask.execute(NetworkInfo.GCM_URL, null, null);
+		// DefaultHttpClient client = new DefaultHttpClient();
+		// HttpPost post = new HttpPost(NetworkInfo.GCM_URL);
+		// JSONObject holder = new JSONObject();
+		// JSONObject taskObj = new JSONObject();
+		// String response = null;
+		// JSONObject json = new JSONObject();
+		//
+		// try {
+		// try {
+		// json.put("success", false);
+		// json.put("info", "Something went wrong. Retry!");
+		// taskObj.put("reg_id", regId);
+		// taskObj.put("noty", noty);
+		//
+		// holder.put("gcm", taskObj);
+		// StringEntity se = new StringEntity(holder.toString(), "utf-8");
+		// post.setEntity(se);
+		// post.setHeader("Accept", "application/json");
+		// post.setHeader("Content-Type", "application/json");
+		//
+		// ResponseHandler<String> responseHandler = new BasicResponseHandler();
+		// response = client.execute(post, responseHandler);
+		// json = new JSONObject(response);
+		//
+		// } catch (HttpResponseException e) {
+		// e.printStackTrace();
+		// Log.e("ClientProtocol", "" + e);
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// Log.e("IO", "" + e);
+		// }
+		// } catch (JSONException e) {
+		// e.printStackTrace();
+		// Log.e("JSON", "" + e);
+		// }
 	}
 
 }

@@ -22,13 +22,15 @@ import com.example.board.lib.UrlJsonAsyncTask;
 public class GCMSendIdToServer extends UrlJsonAsyncTask {
 	private SharedPreferences mPreferences;
 	private String regId = null;
+	private boolean noty = true;
 	private ProgressDialog progressDialog = null;
 
-	public GCMSendIdToServer(Context context, String regId) {
+	public GCMSendIdToServer(Context context, String regId, boolean noty) {
 		super(context);
 
-		this.mPreferences = context.getSharedPreferences("noty",
+		this.mPreferences = context.getSharedPreferences("AuthToken",
 				Context.MODE_PRIVATE);
+		this.noty = noty;
 		this.regId = regId;
 	}
 
