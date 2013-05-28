@@ -135,6 +135,10 @@ public class PostShowActivity extends SherlockActivity {
 					int length = jsonTasks.length();
 					for (int i = 0; i < length; i++) {
 						String image = jsonTasks.getString(i);
+						
+						if(image.contains("fallback/default.png")){
+							throw new Exception("사진이 없습니다");
+						}
 
 						imageBitMapURL[i] = image;
 					}
