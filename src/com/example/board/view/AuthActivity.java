@@ -241,6 +241,7 @@ public class AuthActivity extends SherlockActivity {
 					// the SharedPreferences
 					editor.putString("AuthToken", json.getJSONObject("data")
 							.getString("auth_token"));
+					editor.putString("userName", mUserName);
 					editor.commit();
 
 					// launch the HomeActivity and close this one
@@ -248,7 +249,7 @@ public class AuthActivity extends SherlockActivity {
 							HomeActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
-					
+
 					Toast.makeText(context, json.getString("info"),
 							Toast.LENGTH_LONG).show();
 				} else {
@@ -343,7 +344,8 @@ public class AuthActivity extends SherlockActivity {
 					// the SharedPreferences
 					editor.putString("AuthToken", json.getJSONObject("data")
 							.getString("auth_token"));
-					editor.putString("UserName", mUserName);
+					editor.putString("userName", json.getJSONObject("data")
+							.getString("userName"));
 					editor.commit();
 
 					// launch the HomeActivity and close this one

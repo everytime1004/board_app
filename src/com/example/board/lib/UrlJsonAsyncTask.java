@@ -39,9 +39,9 @@ public class UrlJsonAsyncTask extends AsyncTask<String, Void, JSONObject> {
 	private String jsonInfo;
 
 	public UrlJsonAsyncTask(Context context) {
-		this.context = context;	
+		this.context = context;
 		this.loadingTitle = LOADING_TITLE;
-		this.messageLoading = MESSAGE_LOADING;	
+		this.messageLoading = MESSAGE_LOADING;
 		this.messageBusy = MESSAGE_BUSY;
 		this.messageError = MESSAGE_ERROR;
 		this.timeoutConnect = TIMEOUT_CONNECT;
@@ -50,28 +50,23 @@ public class UrlJsonAsyncTask extends AsyncTask<String, Void, JSONObject> {
 		this.authToken = AUTH_TOKEN;
 		this.jsonSuccess = JSON_SUCCESS;
 		this.jsonInfo = JSON_INFO;
-	} 
+	}
 
 	@Override
 	protected JSONObject doInBackground(String... urls) {
 		return this.queryUrlForJson(urls[0]);
 	}
 
-	@Override 
+	@Override
 	protected void onPreExecute() {
-		progressDialog = ProgressDialog.show(
-			this.context, 
-			this.loadingTitle, 
-			this.messageLoading, 
-			true,
-			true,
-			new DialogInterface.OnCancelListener() {	
-				@Override
-				public void onCancel(DialogInterface arg0) {
-					UrlJsonAsyncTask.this.cancel(true);
-				}
-			}
-		);
+		progressDialog = ProgressDialog.show(this.context, this.loadingTitle,
+				this.messageLoading, true, true,
+				new DialogInterface.OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface arg0) {
+						UrlJsonAsyncTask.this.cancel(true);
+					}
+				});
 	}
 
 	@Override
@@ -82,7 +77,8 @@ public class UrlJsonAsyncTask extends AsyncTask<String, Void, JSONObject> {
 		progressDialog = null;
 	}
 
-	protected void validateJson(JSONObject json) throws JSONException, IOException {
+	protected void validateJson(JSONObject json) throws JSONException,
+			IOException {
 		if (json != null) {
 			if (json.getBoolean("success")) {
 				// success
@@ -92,7 +88,7 @@ public class UrlJsonAsyncTask extends AsyncTask<String, Void, JSONObject> {
 			}
 		} else {
 			throw new IOException(this.messageError);
-		} 
+		}
 	}
 
 	protected JSONObject queryUrlForJson(String url) {
@@ -100,32 +96,34 @@ public class UrlJsonAsyncTask extends AsyncTask<String, Void, JSONObject> {
 		int retries = this.retryCount;
 
 		try {
-		    	try {
-		    		json.put(this.jsonSuccess, false);
-		    		json = JsonHelper.getJsonObjectFromUrl(url, this.timeoutConnect, this.timeoutRead, this.authToken);
-		    	} catch (SocketTimeoutException e) {
-		    		if (retries-- > 0) {
-			    		json = queryUrlForJson(url);	
-		    		} else {
-			    		json.put(this.jsonInfo, this.messageBusy);
-		    		}
-		    	} catch (Exception e) {
-		    		if (retries-- > 0) {
-		    			json = queryUrlForJson(url);
-		    		} else {
+			try {
+				json.put(this.jsonSuccess, false);
+				json = JsonHelper.getJsonObjectFromUrl(url,
+						this.timeoutConnect, this.timeoutRead, this.authToken);
+			} catch (SocketTimeoutException e) {
+				if (retries-- > 0) {
+					json = queryUrlForJson(url);
+				} else {
+					json.put(this.jsonInfo, this.messageBusy);
+				}
+			} catch (Exception e) {
+				if (retries-- > 0) {
+					json = queryUrlForJson(url);
+				} else {
 					Log.e(TAG, Lazy.Ex.getStackTrace(e));
-			    		json.put(this.jsonInfo, this.messageError);	
-		    		}
-		    	} 
+					json.put(this.jsonInfo, this.messageError);
+				}
+			}
 		} catch (JSONException e) {
 			Log.e(TAG, Lazy.Ex.getStackTrace(e));
 			return null;
 		}
 
-	    	return json;
+		return json;
 	}
 
-	public void setConnectionParams(int timeoutConnect, int timeoutRead, int retryCount, String authToken) {
+	public void setConnectionParams(int timeoutConnect, int timeoutRead,
+			int retryCount, String authToken) {
 		this.timeoutConnect = timeoutConnect;
 		this.timeoutRead = timeoutRead;
 		this.retryCount = retryCount;

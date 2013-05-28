@@ -12,6 +12,7 @@ import com.example.board.controller.ServerUtilities;
 public class SettingActivity extends SherlockActivity {
 
 	private SharedPreferences mPreferences;
+	private CheckBox notyCb = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +20,17 @@ public class SettingActivity extends SherlockActivity {
 		setContentView(R.layout.activity_setting);
 
 		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
+
+		notyCb = (CheckBox) findViewById(R.id.notyCb);
+
+		if (mPreferences.getBoolean("noty", false)) {
+			notyCb.setChecked(true);
+		} else {
+			notyCb.setChecked(false);
+		}
 	}
 
 	public void saveSettings(View button) {
-		CheckBox notyCb = (CheckBox) findViewById(R.id.notyCb);
 		if (notyCb.isChecked()) {
 			SharedPreferences.Editor editor = mPreferences.edit();
 			// save the returned auth_token into
@@ -37,7 +45,10 @@ public class SettingActivity extends SherlockActivity {
 			editor.commit();
 		}
 
-		ServerUtilities.register(getApplicationContext(), mPreferences.getString("regId", ""), mPreferences.getBoolean("noty", true));
+		ServerUtilities.register(getApplicationContext(),
+				mPreferences.getString("regId", ""),
+				mPreferences.getBoolean("noty", true),
+				mPreferences.getString("userName", ""));
 
 	}
 }

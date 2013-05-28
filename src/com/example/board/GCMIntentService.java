@@ -20,10 +20,10 @@ import com.google.android.gcm.GCMBaseIntentService;
  * IntentService responsible for handling GCM messages.
  */
 public class GCMIntentService extends GCMBaseIntentService {
-	
+
 	private static final String TAG = "GCMIntentService";
 	private SharedPreferences mPreferences = null;
-    
+
 	public GCMIntentService() {
 		super(NetworkInfo.PROJECT_ID);
 		Log.d("GCM Check", "check");
@@ -36,19 +36,21 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onRegistered(Context context, String registrationId) {
 		Log.i(TAG, "Device registered: regId = " + registrationId);
-		
+
 		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
-		
+
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putString("regId", registrationId);
 		editor.putBoolean("noty", true);
 		editor.commit();
-		
-		ServerUtilities.register(context, registrationId, mPreferences.getBoolean("noty", true));
-//		GCMSendIdToServer sendIdToServer = new GCMSendIdToServer(context,
-//				registrationId);
-//		sendIdToServer.setMessageLoading("GCM Registered...");
-//		sendIdToServer.execute(NetworkInfo.GCM_URL);
+
+		ServerUtilities.register(context, registrationId,
+				mPreferences.getBoolean("noty", true),
+				mPreferences.getString("userName", ""));
+		// GCMSendIdToServer sendIdToServer = new GCMSendIdToServer(context,
+		// registrationId);
+		// sendIdToServer.setMessageLoading("GCM Registered...");
+		// sendIdToServer.execute(NetworkInfo.GCM_URL);
 	}
 
 	@Override

@@ -35,7 +35,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -60,7 +59,8 @@ public final class ServerUtilities {
 	 * 
 	 */
 	public static void register(final Context context, final String regId,
-			final boolean noty) {
+			final boolean noty, final String userName) {
+
 		// YSLIM : LOG
 		Log.i(TAG, "registering device (regId = " + regId + ")");
 
@@ -83,7 +83,7 @@ public final class ServerUtilities {
 			try {
 
 				// YSLIM : Server post
-				sendAppToServer(context, regId, noty);
+				sendAppToServer(context, regId, noty, userName);
 
 				// Google API : Sets whether the device was successfully
 				// registered in the server side
@@ -207,7 +207,9 @@ public final class ServerUtilities {
 	 */
 
 	private static void sendAppToServer(final Context context,
-			final String regId, final boolean noty) throws IOException {
+			final String regId, final boolean noty, final String userName)
+			throws IOException {
+
 		gcmRegisterTask = new AsyncTask<String, Void, JSONObject>() {
 
 			@Override
@@ -223,6 +225,7 @@ public final class ServerUtilities {
 					try {
 						json.put("success", false);
 						json.put("info", "Something went wrong. Retry!");
+						taskObj.put("userName", userName);
 						taskObj.put("reg_id", regId);
 						taskObj.put("noty", noty);
 
@@ -256,8 +259,8 @@ public final class ServerUtilities {
 			protected void onPostExecute(JSONObject json) {
 				try {
 					if (json.getBoolean("success")) {
-//						Toast.makeText(context, json.getString("info"),
-//								Toast.LENGTH_LONG).show();
+						// Toast.makeText(context, json.getString("info"),
+						// Toast.LENGTH_LONG).show();
 					}
 				} catch (Exception e) {
 					Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG)

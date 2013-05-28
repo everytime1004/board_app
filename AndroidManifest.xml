@@ -51,11 +51,6 @@
         <activity
             android:name="com.example.board.view.HomeActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.example.board.view.PostIndexActivity"
@@ -68,6 +63,11 @@
         <activity
             android:name="com.example.board.view.AuthActivity"
             android:label="@string/title_activity_auth" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.example.board.view.SettingActivity"
