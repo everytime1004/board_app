@@ -264,6 +264,12 @@ public class AuthActivity extends SherlockActivity {
 								existEmail + "\n" + invalidName,
 								Toast.LENGTH_LONG).show();
 					}
+					
+					Intent intent = new Intent(AuthActivity.this,
+							AuthActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+					
 				}
 			} catch (Exception e) {
 				// something went wrong: show a Toast

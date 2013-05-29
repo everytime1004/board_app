@@ -100,8 +100,7 @@ public class PostIndexActivity extends SherlockActivity {
 				}
 				tasksListView.setOnItemClickListener(new TasklistListener());
 			} catch (Exception e) {
-				Toast.makeText(context, "게시물이 없습니다.", Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(context, "게시물이 없습니다.", Toast.LENGTH_LONG).show();
 			} finally {
 				super.onPostExecute(json);
 			}

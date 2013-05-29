@@ -15,52 +15,64 @@ import org.json.JSONObject;
 import android.content.Context;
 
 public class JsonHelper {
-	public static JSONArray getJsonArrayFromResource(Context context, int resourceId) throws JSONException, IOException {
+	public static JSONArray getJsonArrayFromResource(Context context,
+			int resourceId) throws JSONException, IOException {
 		InputStream is = context.getResources().openRawResource(resourceId);
 		return new JSONArray(getStringFromInputStream(is));
 	}
 
-	public static JSONObject getJsonObjectFromResource(Context context, int resourceId) throws JSONException, IOException {
+	public static JSONObject getJsonObjectFromResource(Context context,
+			int resourceId) throws JSONException, IOException {
 		InputStream is = context.getResources().openRawResource(resourceId);
 		return new JSONObject(getStringFromInputStream(is));
 	}
 
-	public static JSONArray getJsonArrayFromUrl(String url, String authToken) throws MalformedURLException, JSONException, IOException
-	{
+	public static JSONArray getJsonArrayFromUrl(String url, String authToken)
+			throws MalformedURLException, JSONException, IOException {
 		return getJsonArrayFromUrl(url, 0, 0, authToken);
 	}
 
-	public static JSONArray getJsonArrayFromUrl(String url, int connectTimeout, int readTimeout, String authToken) throws MalformedURLException, JSONException, IOException {
-		return new JSONArray(getStringFromUrl(url, connectTimeout, readTimeout, authToken));
+	public static JSONArray getJsonArrayFromUrl(String url, int connectTimeout,
+			int readTimeout, String authToken) throws MalformedURLException,
+			JSONException, IOException {
+		return new JSONArray(getStringFromUrl(url, connectTimeout, readTimeout,
+				authToken));
 	}
 
-	public static JSONObject getJsonObjectFromUrl(String url, String authToken) throws MalformedURLException, JSONException, IOException
-	{
+	public static JSONObject getJsonObjectFromUrl(String url, String authToken)
+			throws MalformedURLException, JSONException, IOException {
 		return getJsonObjectFromUrl(url, 0, 0, authToken);
 	}
 
-	public static JSONObject getJsonObjectFromUrl(String url, int connectTimeout, int readTimeout, String authToken) throws MalformedURLException, JSONException, IOException
-	{
-		return new JSONObject(getStringFromUrl(url, connectTimeout, readTimeout, authToken));
+	public static JSONObject getJsonObjectFromUrl(String url,
+			int connectTimeout, int readTimeout, String authToken)
+			throws MalformedURLException, JSONException, IOException {
+		return new JSONObject(getStringFromUrl(url, connectTimeout,
+				readTimeout, authToken));
 	}
 
-	static private String getStringFromInputStream(InputStream is) throws IOException {
-		//�ѱ� ���� �� "EUC-KR" �߰�
-		BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
+	static private String getStringFromInputStream(InputStream is)
+			throws IOException {
+		// �ѱ� ���� �� "EUC-KR" �߰�
+		BufferedReader br = new BufferedReader(new InputStreamReader(is,
+				"utf-8"));
 		StringBuilder sb = new StringBuilder();
 		String line = "";
-		while((line = br.readLine()) != null) {
+		while ((line = br.readLine()) != null) {
 			sb.append(line);
 		}
 		return sb.toString();
 	}
 
-	private static String getStringFromUrl(String url, int connectTimeout, int readTimeout, String authToken) throws MalformedURLException, JSONException, IOException {
+	private static String getStringFromUrl(String url, int connectTimeout,
+			int readTimeout, String authToken) throws MalformedURLException,
+			JSONException, IOException {
 		// URL �޾ư�� addRequestProperty�� �ڿ� ���� ���̴°� ����
 		URL urlObject = new URL(url);
-		HttpURLConnection urlConn = (HttpURLConnection)urlObject.openConnection();
+		HttpURLConnection urlConn = (HttpURLConnection) urlObject
+				.openConnection();
 		urlConn.addRequestProperty("Authorization", "Token token=" + authToken);
-		String jsonString  = "";
+		String jsonString = "";
 
 		if (connectTimeout != 0) {
 			urlConn.setConnectTimeout(connectTimeout);
