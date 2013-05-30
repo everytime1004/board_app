@@ -219,7 +219,8 @@ public class PostCreateActivity extends SherlockActivity {
 			// everything is ok!
 			CreateTaskTask createTask = new CreateTaskTask(
 					PostCreateActivity.this);
-			createTask.setMessageLoading("새 글을 등록 중 입니다(사진이 많으면 오래 걸릴 수도 있습니다)...");
+			createTask
+					.setMessageLoading("새 글을 등록 중입니다(사진이 많으면 오래 걸릴 수도 있습니다)...");
 			createTask.setAuthToken(mPreferences.getString("AuthToken", ""));
 			createTask.execute(NetworkInfo.CREATE_TASK_ENDPOINT_URL);
 		}

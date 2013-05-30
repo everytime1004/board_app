@@ -47,10 +47,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 		ServerUtilities.register(context, registrationId,
 				mPreferences.getBoolean("noty", true),
 				mPreferences.getString("userName", ""));
-		// GCMSendIdToServer sendIdToServer = new GCMSendIdToServer(context,
-		// registrationId);
-		// sendIdToServer.setMessageLoading("GCM Registered...");
-		// sendIdToServer.execute(NetworkInfo.GCM_URL);
 	}
 
 	@Override

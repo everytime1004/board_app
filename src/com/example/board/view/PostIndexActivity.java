@@ -57,7 +57,7 @@ public class PostIndexActivity extends SherlockActivity {
 	private void loadPostFromServer(String url, String category) {
 		GetPostsTask getPostsTask = new GetPostsTask(PostIndexActivity.this,
 				category);
-		getPostsTask.setMessageLoading("Loading tasks...");
+		getPostsTask.setMessageLoading("글들을 불러오는 중입니다...");
 		getPostsTask.setAuthToken(mPreferences.getString("AuthToken", ""));
 		getPostsTask.execute(url);
 	}
