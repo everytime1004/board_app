@@ -2,7 +2,7 @@ package com.example.board.model;
 
 public class NetworkInfo {
 	// public static final String IP = "http://172.30.1.19:3000";
-	 public static final String IP = "http://http://115.68.27.117";
+	public static final String IP = "http://115.68.27.117";
 	// public static final String IP = "http://boardgeneration.herokuapp.com";
 
 	public static final String PROJECT_ID = "43944975330";

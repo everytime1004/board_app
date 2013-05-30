@@ -42,7 +42,7 @@ public class PostIndexActivity extends SherlockActivity {
 		if (mPreferences.contains("AuthToken")) {
 			loadPostFromServer(NetworkInfo.TASKS_URL, mCategory);
 		} else {
-			Toast.makeText(this, "로그인을 먼저 해주세요", 2000).show();
+			Toast.makeText(this, "로그인을 먼저 해주세요", Toast.LENGTH_LONG).show();
 			finish();
 		}
 

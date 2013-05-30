@@ -48,15 +48,22 @@ public class AuthActivity extends SherlockActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 
+		if(mPreferences.contains("AuthToken")){
+			Intent mainIntent = new Intent(this, HomeActivity.class);
+			mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(mainIntent);
+			finish();
+		}
+		
 		if (getIntent().getBooleanExtra("register", false)) {
 			setContentView(R.layout.activity_register);
 			addItemsOnSpinner();
 		} else {
 			setContentView(R.layout.activity_sign_in);
 		}
-
-		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 
 	}
 
@@ -146,7 +153,7 @@ public class AuthActivity extends SherlockActivity {
 			} else {
 				// everything is ok!
 				RegisterTask registerTask = new RegisterTask(AuthActivity.this);
-				registerTask.setMessageLoading("Registering new account...");
+				registerTask.setMessageLoading("회원 가입 중...");
 				registerTask.execute(NetworkInfo.REGISTER_API_ENDPOINT_URL);
 			}
 		}

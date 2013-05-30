@@ -50,6 +50,8 @@ public class PostCreateActivity extends SherlockActivity {
 	private String mPostDescription;
 	private String mPostCategory;
 
+	boolean changeImageFlag = false;
+
 	private Spinner category;
 
 	int mImageWidth = 0;
@@ -74,7 +76,7 @@ public class PostCreateActivity extends SherlockActivity {
 
 		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 
-		Toast.makeText(this, "사진은 5장까지 추가가 됩니다.", 2000).show();
+		Toast.makeText(this, "사진은 5장까지 추가가 됩니다.", Toast.LENGTH_LONG).show();
 	}
 
 	private class addImageBtnListener implements OnClickListener {
@@ -87,26 +89,31 @@ public class PostCreateActivity extends SherlockActivity {
 			case 0:
 				targetImage[0] = (ImageView) findViewById(R.id.targetImage1);
 				getImageFromGallery(0);
+				imageNum++;
 				break;
 			case 1:
 				targetImage[1] = (ImageView) findViewById(R.id.targetImage2);
 				getImageFromGallery(1);
+				imageNum++;
 				break;
 			case 2:
 				targetImage[2] = (ImageView) findViewById(R.id.targetImage3);
 				getImageFromGallery(2);
+				imageNum++;
 				break;
 			case 3:
 				targetImage[3] = (ImageView) findViewById(R.id.targetImage4);
 				getImageFromGallery(3);
+				imageNum++;
 				break;
 			case 4:
 				targetImage[4] = (ImageView) findViewById(R.id.targetImage5);
 				getImageFromGallery(4);
+				imageNum++;
 				break;
 			case 5:
-				Toast.makeText(v.getContext(), "사진은 5개까지 추가가 가능합니다.", 2000)
-						.show();
+				Toast.makeText(v.getContext(), "사진은 5개까지 추가가 가능합니다.",
+						Toast.LENGTH_LONG).show();
 			}
 		}
 
@@ -142,11 +149,15 @@ public class PostCreateActivity extends SherlockActivity {
 
 				targetImage[targetImage_num].setVisibility(ImageView.VISIBLE);
 
-				imageNum++;
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else {
+			if (changeImageFlag == false) {
+				imageNum--;
+			}
+			changeImageFlag = false;
 		}
 	}
 
@@ -155,22 +166,27 @@ public class PostCreateActivity extends SherlockActivity {
 		case R.id.targetImage1:
 			targetImage[0] = (ImageView) findViewById(R.id.targetImage1);
 			getImageFromGallery(0);
+			changeImageFlag = true;
 			break;
 		case R.id.targetImage2:
 			targetImage[1] = (ImageView) findViewById(R.id.targetImage2);
 			getImageFromGallery(1);
+			changeImageFlag = true;
 			break;
 		case R.id.targetImage3:
 			targetImage[2] = (ImageView) findViewById(R.id.targetImage3);
 			getImageFromGallery(2);
+			changeImageFlag = true;
 			break;
 		case R.id.targetImage4:
 			targetImage[3] = (ImageView) findViewById(R.id.targetImage4);
 			getImageFromGallery(3);
+			changeImageFlag = true;
 			break;
 		case R.id.targetImage5:
 			targetImage[4] = (ImageView) findViewById(R.id.targetImage5);
 			getImageFromGallery(4);
+			changeImageFlag = true;
 			break;
 		}
 
@@ -197,15 +213,13 @@ public class PostCreateActivity extends SherlockActivity {
 
 		if (mPostTitle.length() == 0) {
 			// input fields are empty
-			Toast.makeText(this,
-					"Please write something as a title for this task",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "제목을 써주세요", Toast.LENGTH_LONG).show();
 			return;
 		} else {
 			// everything is ok!
 			CreateTaskTask createTask = new CreateTaskTask(
 					PostCreateActivity.this);
-			createTask.setMessageLoading("Creating new task...");
+			createTask.setMessageLoading("새 글을 등록 중 입니다(사진이 많으면 오래 걸릴 수도 있습니다)...");
 			createTask.setAuthToken(mPreferences.getString("AuthToken", ""));
 			createTask.execute(NetworkInfo.CREATE_TASK_ENDPOINT_URL);
 		}
