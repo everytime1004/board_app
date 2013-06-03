@@ -78,6 +78,12 @@ public class HomeActivity extends SherlockActivity {
 				Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_LONG).show();
 
 				item.setTitle("로그인");
+				
+				Intent logoutIntent = new Intent(this, AuthActivity.class);
+				logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(logoutIntent);
+				finish();
+				
 				break;
 			}
 

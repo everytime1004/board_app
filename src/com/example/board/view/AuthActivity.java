@@ -256,6 +256,7 @@ public class AuthActivity extends SherlockActivity {
 							HomeActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
+					finish();
 
 					Toast.makeText(context, json.getString("info"),
 							Toast.LENGTH_LONG).show();
@@ -276,6 +277,7 @@ public class AuthActivity extends SherlockActivity {
 							AuthActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
+					finish();
 					
 				}
 			} catch (Exception e) {
@@ -285,7 +287,6 @@ public class AuthActivity extends SherlockActivity {
 						.show();
 			} finally {
 				super.onPostExecute(json);
-				finish();
 			}
 		}
 	}
@@ -366,6 +367,7 @@ public class AuthActivity extends SherlockActivity {
 							HomeActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
+					finish();
 				}
 				Toast.makeText(context, json.getString("info"),
 						Toast.LENGTH_LONG).show();
@@ -376,7 +378,6 @@ public class AuthActivity extends SherlockActivity {
 						.show();
 			} finally {
 				super.onPostExecute(json);
-				finish();
 			}
 		}
 	}
