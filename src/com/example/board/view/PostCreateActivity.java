@@ -3,8 +3,6 @@ package com.example.board.view;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
@@ -15,12 +13,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,11 +26,12 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -50,33 +49,43 @@ public class PostCreateActivity extends SherlockActivity {
 	private String mPostDescription;
 	private String mPostCategory;
 
-	boolean changeImageFlag = false;
+	private String category;
 
-	private Spinner category;
+	// int mImageWidth = 0;
+	// int mImageHeight = 0;
+	// int newImageWidth = 400;
+	// int newImageHeight = 400;
+	int imageNum = 1;
+	int[] imageId_arr = new int[50];
+	boolean isChange = false;
 
-	int mImageWidth = 0;
-	int mImageHeight = 0;
-	int newImageWidth = 400;
-	int newImageHeight = 400;
-	int targetImage_num;
-	int imageNum = 0;
-	float scaleWidth = 0;
-	float scaleHeight = 0;
+	// float scaleWidth = 0;
+	// float scaleHeight = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_create);
 
-		addItemsOnSpinner();
+		category = getIntent().getStringExtra("category");
 
 		Button addImageBtn = (Button) findViewById(R.id.addImageBtn);
 
 		addImageBtn.setOnClickListener(new addImageBtnListener());
 
 		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
+	}
 
-		Toast.makeText(this, "사진은 5장까지 추가가 됩니다.", Toast.LENGTH_LONG).show();
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+
+		Log.d("Present Image[0] Status", String.valueOf(imageId_arr[0]));
+		Log.d("Present Image[1] Status", String.valueOf(imageId_arr[1]));
+		Log.d("Present Image[2] Status", String.valueOf(imageId_arr[2]));
+		Log.d("Present Image[3] Status", String.valueOf(imageId_arr[3]));
+		Log.d("Present Image[4] Status", String.valueOf(imageId_arr[4]));
 	}
 
 	private class addImageBtnListener implements OnClickListener {
@@ -85,38 +94,89 @@ public class PostCreateActivity extends SherlockActivity {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			// imageNum = 이미지 개수
-			switch (imageNum) {
-			case 0:
-				targetImage[0] = (ImageView) findViewById(R.id.targetImage1);
-				getImageFromGallery(0);
-				imageNum++;
-				break;
-			case 1:
-				targetImage[1] = (ImageView) findViewById(R.id.targetImage2);
-				getImageFromGallery(1);
-				imageNum++;
-				break;
-			case 2:
-				targetImage[2] = (ImageView) findViewById(R.id.targetImage3);
-				getImageFromGallery(2);
-				imageNum++;
-				break;
-			case 3:
-				targetImage[3] = (ImageView) findViewById(R.id.targetImage4);
-				getImageFromGallery(3);
-				imageNum++;
-				break;
-			case 4:
-				targetImage[4] = (ImageView) findViewById(R.id.targetImage5);
-				getImageFromGallery(4);
-				imageNum++;
-				break;
-			case 5:
+			int add_image_flag = 0; // 몇 번째에 사진을 추가 할지 경정
+			int max_flag = 0;
+
+			for (int t = 1; t < 50; t++) {
+				if (imageId_arr[t - 1] == 0) {
+					add_image_flag = t;
+					break;
+				} else if (imageId_arr[t - 1] > 0) {
+					max_flag++;
+				}
+
+			}
+			if (max_flag != 5) {
+				getImageFromGallery(add_image_flag);
+			} else {
 				Toast.makeText(v.getContext(), "사진은 5개까지 추가가 가능합니다.",
 						Toast.LENGTH_LONG).show();
 			}
 		}
+	}
 
+	private class imageListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			Log.d("Change Image ID", String.valueOf(v.getId()));
+			isChange = true;
+			getImageFromGallery(v.getId());
+		}
+	}
+
+	private class deleteImageListner implements OnLongClickListener {
+
+		@Override
+		public boolean onLongClick(View v) {
+			// @Override
+
+			final Dialog dialog = new Dialog(PostCreateActivity.this);
+			dialog.setContentView(R.layout.task_remove_input);
+			dialog.setTitle("삭제하시겠습니까?");
+
+			final ImageView clickImage = (ImageView) findViewById(v.getId());
+			final int clickImageId = v.getId();
+			Log.d("Long Click Image ID", String.valueOf(v.getId()));
+
+			// 취소 버튼
+			((Button) dialog.findViewById(R.id.todayCancelBtn))
+					.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							dialog.dismiss();
+						}
+					});
+			// 저장 버튼
+			((Button) dialog.findViewById(R.id.todayInputBtn))
+					.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Toast.makeText(getApplicationContext(), "삭제했습니다.",
+									Toast.LENGTH_SHORT).show();
+							clickImage.setImageBitmap(null);
+							clickImage.setImageResource(0);
+							imageId_arr[clickImageId - 1] = -1;
+							Log.d("DeleteImageID", String.valueOf(clickImageId));
+
+							Log.d("Present Image[0] Status",
+									String.valueOf(imageId_arr[0]));
+							Log.d("Present Image[1] Status",
+									String.valueOf(imageId_arr[1]));
+							Log.d("Present Image[2] Status",
+									String.valueOf(imageId_arr[2]));
+							Log.d("Present Image[3] Status",
+									String.valueOf(imageId_arr[3]));
+							Log.d("Present Image[4] Status",
+									String.valueOf(imageId_arr[4]));
+
+							dialog.dismiss();
+						}
+					});
+			dialog.show();
+			return false;
+
+		}
 	}
 
 	@Override
@@ -126,79 +186,48 @@ public class PostCreateActivity extends SherlockActivity {
 
 		if (resultCode == RESULT_OK) {
 			Uri targetUri = data.getData();
-			Bitmap bitmap;
 			try {
-				bitmap = BitmapFactory.decodeStream(getContentResolver()
-						.openInputStream(targetUri));
+				Log.d("Add Image ID", String.valueOf(requestCode));
+				if (isChange == true) {
+					ImageView changeImage = (ImageView) findViewById(imageId_arr[requestCode - 1]);
 
-				targetImage[targetImage_num].setImageResource(0);
+					changeImage.setImageBitmap(decodeUri(targetUri));
+					changeImage.setId(requestCode);
 
-				mImageWidth = bitmap.getWidth();
-				mImageHeight = bitmap.getHeight();
+					isChange = false;
+				} else {
+					LinearLayout postCreateView = (LinearLayout) findViewById(R.id.postCreateView);
+					ImageView newImage = new ImageView(getBaseContext());
+					newImage.setLayoutParams(new LayoutParams(
+							LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
-				scaleWidth = ((float) newImageWidth) / mImageWidth;
-				scaleHeight = ((float) newImageHeight) / mImageHeight;
+					newImage.setImageBitmap(decodeUri(targetUri));
+					newImage.setId(requestCode);
+					Log.d("addImage Request Code", String.valueOf(requestCode));
+					newImage.setOnLongClickListener(new deleteImageListner());
+					newImage.setOnClickListener(new imageListener());
 
-				Matrix matrix = new Matrix();
-				matrix.postScale(scaleWidth, scaleHeight);
+					postCreateView.addView(newImage);
 
-				Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-						mImageWidth, mImageHeight, matrix, true);
-
-				targetImage[targetImage_num].setImageBitmap(resizedBitmap);
-
-				targetImage[targetImage_num].setVisibility(ImageView.VISIBLE);
+					imageNum++;
+				}
 
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
-			if (changeImageFlag == false) {
-				imageNum--;
-			}
-			changeImageFlag = false;
+			imageId_arr[requestCode - 1] = 0;
+			Log.d("RESULT_CANCEL", "CANCEL");
 		}
 	}
 
-	public boolean imageListener(View image) {
-		switch (image.getId()) {
-		case R.id.targetImage1:
-			targetImage[0] = (ImageView) findViewById(R.id.targetImage1);
-			getImageFromGallery(0);
-			changeImageFlag = true;
-			break;
-		case R.id.targetImage2:
-			targetImage[1] = (ImageView) findViewById(R.id.targetImage2);
-			getImageFromGallery(1);
-			changeImageFlag = true;
-			break;
-		case R.id.targetImage3:
-			targetImage[2] = (ImageView) findViewById(R.id.targetImage3);
-			getImageFromGallery(2);
-			changeImageFlag = true;
-			break;
-		case R.id.targetImage4:
-			targetImage[3] = (ImageView) findViewById(R.id.targetImage4);
-			getImageFromGallery(3);
-			changeImageFlag = true;
-			break;
-		case R.id.targetImage5:
-			targetImage[4] = (ImageView) findViewById(R.id.targetImage5);
-			getImageFromGallery(4);
-			changeImageFlag = true;
-			break;
-		}
-
-		return true;
-	}
-
-	public void getImageFromGallery(int image_num) {
+	public void getImageFromGallery(int imageId) {
 		Intent intent = new Intent(Intent.ACTION_PICK,
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		targetImage_num = image_num;
+		imageId_arr[imageId - 1] = imageId;
 		intent.setType("image/*");
-		startActivityForResult(intent, 0);
+		startActivityForResult(intent, imageId);
 	}
 
 	public void saveTask(View button) {
@@ -208,8 +237,9 @@ public class PostCreateActivity extends SherlockActivity {
 		mPostDescription = postDescriptionField.getText().toString();
 		// http://www.mkyong.com/android/android-spinner-drop-down-list-example/
 		// ���ǳ� (select item)
-		Spinner postCategoryField = (Spinner) findViewById(R.id.postCategory);
-		mPostCategory = String.valueOf(postCategoryField.getSelectedItem());
+		// Spinner postCategoryField = (Spinner)
+		// findViewById(R.id.postCategory);
+		mPostCategory = category;
 
 		if (mPostTitle.length() == 0) {
 			// input fields are empty
@@ -240,11 +270,18 @@ public class PostCreateActivity extends SherlockActivity {
 			String response = null;
 			JSONObject json = new JSONObject();
 
-			targetImage[0] = (ImageView) findViewById(R.id.targetImage1);
-			targetImage[1] = (ImageView) findViewById(R.id.targetImage2);
-			targetImage[2] = (ImageView) findViewById(R.id.targetImage3);
-			targetImage[3] = (ImageView) findViewById(R.id.targetImage4);
-			targetImage[4] = (ImageView) findViewById(R.id.targetImage5);
+			int tmp_flag = 0;
+
+			for (int k = 0; k < 50; k++) {
+				if (imageId_arr[k] > 0) {
+					targetImage[tmp_flag] = (ImageView) findViewById(imageId_arr[k]);
+					tmp_flag++;
+
+					if (tmp_flag == 5) {
+						break;
+					}
+				}
+			}
 
 			for (int i = 0; i < imageNum; i++) {
 				ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
@@ -324,15 +361,37 @@ public class PostCreateActivity extends SherlockActivity {
 		}
 	}
 
-	public void addItemsOnSpinner() {
-		category = (Spinner) findViewById(R.id.postCategory);
-		List<String> list = new ArrayList<String>();
-		list.add(getIntent().getStringExtra("category"));
+	private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException {
+		BitmapFactory.Options o = new BitmapFactory.Options();
+		o.inJustDecodeBounds = true;
+		BitmapFactory.decodeStream(
+				getContentResolver().openInputStream(selectedImage), null, o);
 
-		ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, list);
-		categoryAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		category.setAdapter(categoryAdapter);
+		final int REQUIRED_SIZE = 300;
+
+		int width_tmp = o.outWidth, height_tmp = o.outHeight;
+		int scale = 1;
+		while (!(width_tmp / 2 < REQUIRED_SIZE && height_tmp / 2 < REQUIRED_SIZE)) {
+			width_tmp /= 2;
+			height_tmp /= 2;
+			scale *= 2;
+		}
+
+		BitmapFactory.Options o2 = new BitmapFactory.Options();
+		o2.inSampleSize = scale;
+		return BitmapFactory.decodeStream(
+				getContentResolver().openInputStream(selectedImage), null, o2);
 	}
+
+	// public void addItemsOnSpinner() {
+	// category = (Spinner) findViewById(R.id.postCategory);
+	// List<String> list = new ArrayList<String>();
+	// list.add(getIntent().getStringExtra("category"));
+	//
+	// ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
+	// android.R.layout.simple_spinner_item, list);
+	// categoryAdapter
+	// .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	// category.setAdapter(categoryAdapter);
+	// }
 }

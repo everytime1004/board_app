@@ -6,12 +6,5 @@
         android:showAsAction="ifRoom|withText"
         android:title="@string/login"
         />
-    
-    <item
-        android:id="@+id/action_setting"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/setting"
-        />
 
 </menu>

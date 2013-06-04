@@ -35,8 +35,7 @@ public class HomeActivity extends SherlockActivity {
 			// actionbar setting
 			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
 					| ActionBar.NAVIGATION_MODE_STANDARD
-					| ActionBar.DISPLAY_HOME_AS_UP
-					| ActionBar.DISPLAY_SHOW_HOME);
+					| ActionBar.DISPLAY_HOME_AS_UP);
 
 			mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 		}
@@ -78,19 +77,14 @@ public class HomeActivity extends SherlockActivity {
 				Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_LONG).show();
 
 				item.setTitle("로그인");
-				
+
 				Intent logoutIntent = new Intent(this, AuthActivity.class);
 				logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(logoutIntent);
 				finish();
-				
+
 				break;
 			}
-
-		case R.id.action_setting:
-			Intent settingIntent = new Intent(this, SettingActivity.class);
-			startActivity(settingIntent);
-			break;
 		}
 
 		return true;
@@ -174,6 +168,9 @@ public class HomeActivity extends SherlockActivity {
 			showIntent.putExtra("category", "판매 완료");
 			startActivity(showIntent);
 			break;
+		case R.id.settingBtn:
+			Intent settingIntent = new Intent(this, SettingActivity.class);
+			startActivity(settingIntent);
 		}
 	}
 

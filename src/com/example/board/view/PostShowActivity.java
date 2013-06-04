@@ -45,13 +45,6 @@ public class PostShowActivity extends SherlockActivity {
 
 	private ImageView[] showImage = new ImageView[5];
 
-	int mImageWidth = 0;
-	int mImageHeight = 0;
-	int newImageWidth = 400;
-	int newImageHeight = 400;
-	float scaleWidth = 0;
-	float scaleHeight = 0;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

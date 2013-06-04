@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="week_blue">#42ABD3</color>
+    <color name="white">#ffffff</color>
+    <color name="text_normal">#778391</color>
+    <color name="text_small">#A7AEB5</color>
+    <color name="transparent">#80000000</color>
+    <color name="hint">#C1C1C1</color>
+    
+    
+    <color name="holo_blue_bright">#00ddff</color>
+    <color name="holo_blue_dark">#0099cc</color>
+</resources>

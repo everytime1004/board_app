@@ -685,10 +685,18 @@ containing a value of this type.
         public static final int abs__bright_foreground_inverse_holo_dark=0x7f060006;
         public static final int abs__bright_foreground_inverse_holo_light=0x7f060007;
         public static final int abs__holo_blue_light=0x7f060008;
-        public static final int abs__primary_text_disable_only_holo_dark=0x7f060009;
-        public static final int abs__primary_text_disable_only_holo_light=0x7f06000a;
-        public static final int abs__primary_text_holo_dark=0x7f06000b;
-        public static final int abs__primary_text_holo_light=0x7f06000c;
+        public static final int abs__primary_text_disable_only_holo_dark=0x7f060011;
+        public static final int abs__primary_text_disable_only_holo_light=0x7f060012;
+        public static final int abs__primary_text_holo_dark=0x7f060013;
+        public static final int abs__primary_text_holo_light=0x7f060014;
+        public static final int hint=0x7f06000e;
+        public static final int holo_blue_bright=0x7f06000f;
+        public static final int holo_blue_dark=0x7f060010;
+        public static final int text_normal=0x7f06000b;
+        public static final int text_small=0x7f06000c;
+        public static final int transparent=0x7f06000d;
+        public static final int week_blue=0x7f060009;
+        public static final int white=0x7f06000a;
     }
     public static final class dimen {
         /**  Default height of an action bar. 
@@ -925,7 +933,13 @@ containing a value of this type.
         public static final int abs__textfield_searchview_holo_light=0x7f02006c;
         public static final int abs__textfield_searchview_right_holo_dark=0x7f02006d;
         public static final int abs__textfield_searchview_right_holo_light=0x7f02006e;
-        public static final int ic_launcher=0x7f02006f;
+        public static final int button_cancel=0x7f02006f;
+        public static final int button_cancel_pressed=0x7f020070;
+        public static final int button_cancel_selector=0x7f020071;
+        public static final int button_delete=0x7f020072;
+        public static final int button_delete_pressed=0x7f020073;
+        public static final int button_delete_selector=0x7f020074;
+        public static final int ic_launcher=0x7f020075;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f040022;
@@ -969,10 +983,9 @@ containing a value of this type.
         public static final int abs__titleDivider=0x7f04001c;
         public static final int abs__up=0x7f04000b;
         public static final int action_auth=0x7f040057;
-        public static final int action_create_task=0x7f040059;
+        public static final int action_create_task=0x7f040058;
         public static final int action_registeration=0x7f040056;
-        public static final int action_setting=0x7f040058;
-        public static final int addImageBtn=0x7f04003a;
+        public static final int addImageBtn=0x7f04003b;
         public static final int boardBuyBtn=0x7f040033;
         public static final int boardInquiryBtn=0x7f040036;
         public static final int boardSellBtn=0x7f040034;
@@ -981,42 +994,42 @@ containing a value of this type.
         public static final int edit_query=0x7f040027;
         public static final int homeAsUp=0x7f040006;
         public static final int listMode=0x7f040002;
-        public static final int loginButton=0x7f040053;
+        public static final int loginButton=0x7f040051;
+        public static final int neccessary=0x7f040046;
         public static final int normal=0x7f040001;
-        public static final int notyButton=0x7f040052;
-        public static final int notyCb=0x7f040051;
-        public static final int phone_first=0x7f04004d;
-        public static final int phone_second=0x7f04004e;
-        public static final int phone_third=0x7f04004f;
-        public static final int postCategory=0x7f040039;
-        public static final int postDescription=0x7f040038;
-        public static final int postLv=0x7f040041;
-        public static final int postTitle=0x7f040037;
-        public static final int registerButton=0x7f040050;
-        public static final int saveTaskButton=0x7f040040;
+        public static final int notyButton=0x7f040050;
+        public static final int notyCb=0x7f04004f;
+        public static final int option=0x7f04003a;
+        public static final int phone_first=0x7f04004b;
+        public static final int phone_second=0x7f04004c;
+        public static final int phone_third=0x7f04004d;
+        public static final int postCreateView=0x7f04003c;
+        public static final int postDescription=0x7f040039;
+        public static final int postLv=0x7f04003e;
+        public static final int postTitle=0x7f040038;
+        public static final int registerButton=0x7f04004e;
+        public static final int saveTaskButton=0x7f04003d;
+        public static final int settingBtn=0x7f040037;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
-        public static final int showImage1=0x7f040044;
-        public static final int showImage2=0x7f040045;
-        public static final int showImage3=0x7f040046;
-        public static final int showImage4=0x7f040047;
-        public static final int showImage5=0x7f040048;
+        public static final int showImage1=0x7f040041;
+        public static final int showImage2=0x7f040042;
+        public static final int showImage3=0x7f040043;
+        public static final int showImage4=0x7f040044;
+        public static final int showImage5=0x7f040045;
         public static final int showTitle=0x7f040007;
         public static final int tabMode=0x7f040003;
-        public static final int targetImage1=0x7f04003b;
-        public static final int targetImage2=0x7f04003c;
-        public static final int targetImage3=0x7f04003d;
-        public static final int targetImage4=0x7f04003e;
-        public static final int targetImage5=0x7f04003f;
-        public static final int task_category=0x7f040055;
-        public static final int task_show_description=0x7f040043;
-        public static final int task_show_title=0x7f040042;
-        public static final int task_title=0x7f040054;
+        public static final int task_category=0x7f040053;
+        public static final int task_show_description=0x7f040040;
+        public static final int task_show_title=0x7f04003f;
+        public static final int task_title=0x7f040052;
+        public static final int todayCancelBtn=0x7f040054;
+        public static final int todayInputBtn=0x7f040055;
         public static final int useLogo=0x7f040004;
-        public static final int userEmail=0x7f040049;
-        public static final int userName=0x7f04004a;
-        public static final int userPassword=0x7f04004b;
-        public static final int userPasswordConfirmation=0x7f04004c;
+        public static final int userEmail=0x7f040047;
+        public static final int userName=0x7f040048;
+        public static final int userPassword=0x7f040049;
+        public static final int userPasswordConfirmation=0x7f04004a;
         public static final int wrap_content=0x7f040000;
     }
     public static final class integer {
@@ -1056,6 +1069,7 @@ containing a value of this type.
         public static final int post_row=0x7f03001e;
         public static final int sherlock_spinner_dropdown_item=0x7f03001f;
         public static final int sherlock_spinner_item=0x7f030020;
+        public static final int task_remove_input=0x7f030021;
     }
     public static final class menu {
         public static final int auth=0x7f0b0000;
@@ -1116,6 +1130,7 @@ containing a value of this type.
         public static final int boardInquiryBtnText=0x7f090017;
         public static final int boardSellBtnText=0x7f090016;
         public static final int boardSellCompleteBtnText=0x7f090018;
+        public static final int cancel=0x7f090024;
         public static final int create_task=0x7f09001e;
         public static final int hello_world=0x7f090011;
         public static final int login=0x7f09001c;
@@ -1125,6 +1140,7 @@ containing a value of this type.
         public static final int postShowShowPicture=0x7f09001b;
         public static final int postShowTitle=0x7f090019;
         public static final int registeration=0x7f090020;
+        public static final int remove=0x7f090025;
         public static final int setting=0x7f09001f;
         public static final int title_activity_auth=0x7f090014;
         public static final int title_activity_post_show=0x7f090013;

@@ -7,6 +7,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="15dp" >
+        
+        <TextView 
+            android:id="@+id/neccessary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* 필수 항목"
+            android:layout_gravity="right"
+            />
 
         <EditText
             android:id="@+id/userEmail"
@@ -14,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="이메일"
+            android:hint="이메일*"
             android:inputType="textEmailAddress" >
 
             <requestFocus android:layout_width="wrap_content" />
@@ -26,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="이름"
+            android:hint="이름*"
             android:inputType="text" />
 
         <EditText
@@ -35,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="패스워드"
+            android:hint="패스워드*"
             android:inputType="textPassword" />
 
         <EditText
@@ -44,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="패스워드 확인"
+            android:hint="패스워드 확인*"
             android:inputType="textPassword" />
 
         <LinearLayout

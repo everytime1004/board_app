@@ -30,10 +30,12 @@
             android:inputType="textMultiLine" >
         </EditText>
 
-        <Spinner
-            android:id="@+id/postCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="사진은 5개까지 추가가 가능합니다." />
 
         <Button
             android:id="@+id/addImageBtn"
@@ -44,54 +46,11 @@
         </Button>
 
         <LinearLayout
+            android:id="@+id/postCreateView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:orientation="vertical" >
-
-            <ImageView
-                android:id="@+id/targetImage1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="imageListener"
-                android:src="@drawable/ic_launcher"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/targetImage2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="imageListener"
-                android:src="@drawable/ic_launcher"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/targetImage3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="imageListener"
-                android:src="@drawable/ic_launcher"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/targetImage4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="imageListener"
-                android:src="@drawable/ic_launcher"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/targetImage5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="imageListener"
-                android:src="@drawable/ic_launcher"
-                android:visibility="invisible" />
         </LinearLayout>
 
         <Button
@@ -100,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="saveTask"
-            android:text="save" />
+            android:text="저장" />
     </LinearLayout>
 
 </ScrollView>

@@ -22,5 +22,7 @@
     <string name="loginIdHint">이메일를 입력해주세요</string>
     <string name="LoginPoasswordHint">패스워드를 입력해주세요</string>
     <string name="addImageBtnText">사진 추가</string>
+    <string name="cancel">취소</string>
+    <string name="remove">삭제</string>
 
 </resources>
