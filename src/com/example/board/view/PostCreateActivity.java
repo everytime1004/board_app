@@ -51,16 +51,8 @@ public class PostCreateActivity extends SherlockActivity {
 
 	private String category;
 
-	// int mImageWidth = 0;
-	// int mImageHeight = 0;
-	// int newImageWidth = 400;
-	// int newImageHeight = 400;
-	int imageNum = 1;
 	int[] imageId_arr = new int[50];
 	boolean isChange = false;
-
-	// float scaleWidth = 0;
-	// float scaleHeight = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -208,8 +200,6 @@ public class PostCreateActivity extends SherlockActivity {
 					newImage.setOnClickListener(new imageListener());
 
 					postCreateView.addView(newImage);
-
-					imageNum++;
 				}
 
 			} catch (FileNotFoundException e) {
@@ -270,14 +260,14 @@ public class PostCreateActivity extends SherlockActivity {
 			String response = null;
 			JSONObject json = new JSONObject();
 
-			int tmp_flag = 0;
+			int imageNum = 0;
 
 			for (int k = 0; k < 50; k++) {
 				if (imageId_arr[k] > 0) {
-					targetImage[tmp_flag] = (ImageView) findViewById(imageId_arr[k]);
-					tmp_flag++;
+					targetImage[imageNum] = (ImageView) findViewById(imageId_arr[k]);
+					imageNum++;
 
-					if (tmp_flag == 5) {
+					if (imageNum == 5) {
 						break;
 					}
 				}
