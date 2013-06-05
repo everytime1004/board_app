@@ -5,12 +5,14 @@ public class Post {
 	private String title;
 	private String category;
 	private String description;
+	private String updated_time;
 
-	public Post(int id, String title, String category, String description) {
+	public Post(int id, String title, String category, String description, String updated_time) {
 		this.id = id;
 		this.title = title;
 		this.category = category;
 		this.description = description;
+		this.updated_time = updated_time;
 	}
 
 	public int getId() {
@@ -43,5 +45,13 @@ public class Post {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getUpdated_time(){
+		return updated_time;
+	}
+	
+	public void setUpdated_time(String updated_time){
+		this.updated_time = updated_time;
 	}
 }

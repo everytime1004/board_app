@@ -982,9 +982,9 @@ containing a value of this type.
         public static final int abs__title=0x7f04001b;
         public static final int abs__titleDivider=0x7f04001c;
         public static final int abs__up=0x7f04000b;
-        public static final int action_auth=0x7f040057;
-        public static final int action_create_task=0x7f040058;
-        public static final int action_registeration=0x7f040056;
+        public static final int action_auth=0x7f040059;
+        public static final int action_create_task=0x7f04005a;
+        public static final int action_registeration=0x7f040058;
         public static final int addImageBtn=0x7f04003b;
         public static final int boardBuyBtn=0x7f040033;
         public static final int boardInquiryBtn=0x7f040036;
@@ -1023,8 +1023,10 @@ containing a value of this type.
         public static final int task_show_description=0x7f040040;
         public static final int task_show_title=0x7f04003f;
         public static final int task_title=0x7f040052;
-        public static final int todayCancelBtn=0x7f040054;
-        public static final int todayInputBtn=0x7f040055;
+        public static final int task_updated_day=0x7f040054;
+        public static final int task_updated_time=0x7f040055;
+        public static final int todayCancelBtn=0x7f040056;
+        public static final int todayInputBtn=0x7f040057;
         public static final int useLogo=0x7f040004;
         public static final int userEmail=0x7f040047;
         public static final int userName=0x7f040048;

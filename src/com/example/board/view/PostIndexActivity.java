@@ -36,6 +36,8 @@ public class PostIndexActivity extends SherlockActivity {
 		setContentView(R.layout.activity_post_index);
 
 		mCategory = getIntent().getStringExtra("category");
+		
+		setTitle(mCategory);
 
 		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 
@@ -86,10 +88,19 @@ public class PostIndexActivity extends SherlockActivity {
 					if (category.equals(jsonTask.getString("category"))
 							|| jsonTask.getString("category").equals("공지사항")) {
 
+						String updated_time = jsonTask.getString("updated_at");
+						// 2013-06-03T06:39:00Z
+
+						String[] updated_time_split = updated_time.split("T");
+
+						updated_time = updated_time_split[0] + " "
+								+ updated_time_split[1].split(":")[0] + "시 "
+								+ updated_time_split[1].split(":")[1] + "분";
+
 						tasksArray.add(new Post(jsonTask.getInt("id"), jsonTask
 								.getString("title"), jsonTask
 								.getString("category"), jsonTask
-								.getString("description")));
+								.getString("description"), updated_time));
 					}
 				}
 
