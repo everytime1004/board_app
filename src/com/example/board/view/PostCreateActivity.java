@@ -81,7 +81,6 @@ public class PostCreateActivity extends SherlockActivity {
 	}
 
 	private class addImageBtnListener implements OnClickListener {
-
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub

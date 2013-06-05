@@ -13,6 +13,7 @@ public class PostRow extends LinearLayout {
 	private TextView task_category;
 	private TextView task_updated_day;
 	private TextView task_updated_time;
+	private TextView task_author;
 
 	public PostRow(Context context, Post mPost) {
 		super(context);
@@ -25,7 +26,7 @@ public class PostRow extends LinearLayout {
 		task_title.setText(mPost.getTitle());
 
 		task_category = (TextView) findViewById(R.id.task_category);
-		task_category.setText(mPost.getCategory());
+		task_category.setText("분류 : " + mPost.getCategory());
 
 		task_updated_day = (TextView) findViewById(R.id.task_updated_day);
 		task_updated_day.setText(mPost.getUpdated_time().split(" ")[0]);
@@ -33,6 +34,9 @@ public class PostRow extends LinearLayout {
 		task_updated_time = (TextView) findViewById(R.id.task_updated_time);
 		task_updated_time.setText(mPost.getUpdated_time().split(" ")[1] + " "
 				+ mPost.getUpdated_time().split(" ")[2]);
+
+		task_author = (TextView) findViewById(R.id.task_author);
+		task_author.setText("작성자 : " + mPost.getAuthor());
 
 	}
 
@@ -50,5 +54,9 @@ public class PostRow extends LinearLayout {
 
 	public void setUpdated_time(String data) {
 		task_updated_time.setText(data);
+	}
+
+	public void setAuthor(String data) {
+		task_author.setText(data);
 	}
 }

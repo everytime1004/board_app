@@ -42,13 +42,16 @@ public class PostAdapter extends BaseAdapter {
 			mPostTextView = (PostRow) convertView;
 
 			mPostTextView.setTitle(mPosts.get(position).getTitle());
-			mPostTextView.setCategory(mPosts.get(position).getCategory());
+			mPostTextView.setCategory("분류 : "
+					+ mPosts.get(position).getCategory());
 			mPostTextView.setUpdated_day(mPosts.get(position).getUpdated_time()
 					.split(" ")[0]);
 			mPostTextView.setUpdated_time(mPosts.get(position)
 					.getUpdated_time().split(" ")[1]
 					+ " "
 					+ mPosts.get(position).getUpdated_time().split(" ")[2]);
+			mPostTextView
+					.setAuthor("작성자 : " + mPosts.get(position).getAuthor());
 		}
 
 		return mPostTextView;

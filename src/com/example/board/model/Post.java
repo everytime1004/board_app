@@ -6,13 +6,15 @@ public class Post {
 	private String category;
 	private String description;
 	private String updated_time;
+	private String author;
 
-	public Post(int id, String title, String category, String description, String updated_time) {
+	public Post(int id, String title, String category, String description, String updated_time, String author) {
 		this.id = id;
 		this.title = title;
 		this.category = category;
 		this.description = description;
 		this.updated_time = updated_time;
+		this.author = author;
 	}
 
 	public int getId() {
@@ -53,5 +55,13 @@ public class Post {
 	
 	public void setUpdated_time(String updated_time){
 		this.updated_time = updated_time;
+	}
+	
+	public String getAuthor(){
+		return author;
+	}
+	
+	public void setAuthor(String author){
+		this.author = author;
 	}
 }

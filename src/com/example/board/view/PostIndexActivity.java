@@ -116,6 +116,8 @@ public class PostIndexActivity extends SherlockActivity {
 					if (category.equals(jsonTask.getString("category"))
 							|| jsonTask.getString("category").equals("공지사항")) {
 						
+						String author = jsonTask.getString("author");
+						
 						String updated_time = jsonTask.getString("updated_at");
 						// 2013-06-03T06:39:00Z
 
@@ -128,7 +130,7 @@ public class PostIndexActivity extends SherlockActivity {
 						tasksArray.add(new Post(jsonTask.getInt("id"), jsonTask
 								.getString("title"), jsonTask
 								.getString("category"), jsonTask
-								.getString("description"), updated_time));
+								.getString("description"), updated_time, author));
 					}
 				}
 
