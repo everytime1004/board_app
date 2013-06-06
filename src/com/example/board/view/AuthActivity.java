@@ -48,16 +48,16 @@ public class AuthActivity extends SherlockActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 
-		if(mPreferences.contains("AuthToken")){
+		if (mPreferences.contains("AuthToken")) {
 			Intent mainIntent = new Intent(this, HomeActivity.class);
 			mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(mainIntent);
 			finish();
 		}
-		
+
 		if (getIntent().getBooleanExtra("register", false)) {
 			setContentView(R.layout.activity_register);
 			addItemsOnSpinner();
@@ -198,7 +198,7 @@ public class AuthActivity extends SherlockActivity {
 					// setup the returned values in case
 					// something goes wrong
 					json.put("success", false);
-					json.put("info", "Something went wrong. Retry!");
+					json.put("info", "인터넷 연결을 다시 확인해 주세요.");
 					// add the users's info to the post params
 					userObj.put("email", mUserEmail);
 					userObj.put("name", mUserName);
@@ -249,6 +249,8 @@ public class AuthActivity extends SherlockActivity {
 					editor.putString("AuthToken", json.getJSONObject("data")
 							.getString("auth_token"));
 					editor.putString("userName", mUserName);
+					editor.putInt("userId",
+							json.getJSONObject("data").getInt("user_id"));
 					editor.commit();
 
 					// launch the HomeActivity and close this one
@@ -272,13 +274,13 @@ public class AuthActivity extends SherlockActivity {
 								existEmail + "\n" + invalidName,
 								Toast.LENGTH_LONG).show();
 					}
-					
+
 					Intent intent = new Intent(AuthActivity.this,
 							AuthActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
 					finish();
-					
+
 				}
 			} catch (Exception e) {
 				// something went wrong: show a Toast
@@ -360,6 +362,8 @@ public class AuthActivity extends SherlockActivity {
 							.getString("auth_token"));
 					editor.putString("userName", json.getJSONObject("data")
 							.getString("userName"));
+					editor.putInt("userId",
+							json.getJSONObject("data").getInt("user_id"));
 					editor.commit();
 
 					// launch the HomeActivity and close this one

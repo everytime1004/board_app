@@ -17,6 +17,9 @@ public class NetworkInfo {
 
 	public static final String CREATE_TASK_ENDPOINT_URL = IP
 			+ "/api/v1/posts.json";
+	
+	public static final String CREATE_COMMENT_ENDPOINT_URL = IP
+			+ "/api/v1/comments.json";
 
 	public static final String TASKS_URL = IP + "/api/v1/posts.json";
 }

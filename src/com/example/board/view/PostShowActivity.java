@@ -8,8 +8,15 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -21,9 +28,14 @@ import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +50,8 @@ import com.example.board.model.NetworkInfo;
 public class PostShowActivity extends SherlockActivity {
 
 	private static int mPostId = 0;
+	private static String mPostTitle = "";
+	private static String mPostDescription = "";
 
 	private static String SHOW_TASK_ENDPOINT_URL;
 
@@ -51,6 +65,9 @@ public class PostShowActivity extends SherlockActivity {
 
 	private ImageView[] showImage = new ImageView[5];
 
+	private ListView commentsShowListView;
+	EditText addCommentEt;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,12 +77,15 @@ public class PostShowActivity extends SherlockActivity {
 
 		TextView task_show_title = (TextView) findViewById(R.id.task_show_title);
 		TextView task_show_description = (TextView) findViewById(R.id.task_show_description);
+		commentsShowListView = (ListView) findViewById(R.id.comments_show_list);
 
 		Intent taskIntent = getIntent();
-
-		task_show_title.setText(taskIntent.getStringExtra("title"));
-		task_show_description.setText(taskIntent.getStringExtra("description"));
+		mPostTitle = taskIntent.getStringExtra("title");
+		mPostDescription = taskIntent.getStringExtra("description");
 		mPostId = taskIntent.getIntExtra("post_id", 0);
+		
+		task_show_title.setText(mPostTitle);
+		task_show_description.setText(mPostDescription);
 
 		SHOW_TASK_ENDPOINT_URL = NetworkInfo.IP + "/api/v1/posts/" + mPostId
 				+ ".json";
@@ -213,32 +233,6 @@ public class PostShowActivity extends SherlockActivity {
 			CacheManager.cacheData(getApplicationContext(), bitmap, totalURL);
 
 			return bitmap;
-
-			// HttpResponse response = client.execute(getRequest);
-			// final int statusCode = response.getStatusLine().getStatusCode();
-			// if (statusCode != HttpStatus.SC_OK) {
-			// Log.w("ImageDownloader", "Error " + statusCode
-			// + " while retrieving bitmap from " + url);
-			// return null;
-			// }
-			//
-			// final HttpEntity entity = response.getEntity();
-			// if (entity != null) {
-			// InputStream inputStream = null;
-			// try {
-			// inputStream = entity.getContent();
-			// BitmapFactory.Options options = new BitmapFactory.Options();
-			// options.inSampleSize = 2;
-			// final Bitmap bitmap = BitmapFactory
-			// .decodeStream(inputStream);
-			// return bitmap;
-			// } finally {
-			// if (inputStream != null) {
-			// inputStream.close();
-			// }
-			// entity.consumeContent();
-			// }
-			// }
 		} catch (Exception e) {
 			// Could provide a more explicit error message for IOException or
 			// IllegalStateException
@@ -260,13 +254,42 @@ public class PostShowActivity extends SherlockActivity {
 			TextView showComments = (TextView) findViewById(R.id.showComments);
 			showComments.setVisibility(TextView.INVISIBLE);
 
-			showCommentsTasks commentsTasks = new showCommentsTasks(
+			Button addCommentBtn = (Button) findViewById(R.id.showCommentEditTextBtn);
+			addCommentBtn.setVisibility(Button.VISIBLE);
+
+			showCommentsTasks showCommentsTasks = new showCommentsTasks(
 					PostShowActivity.this);
-			commentsTasks.setMessageLoading("댓글 불러오는중...");
-			commentsTasks.setAuthToken(mPreferences.getString("AuthToken", ""));
-			commentsTasks.execute(SHOW_COMMENTS_ENDPOINT_URL);
+			showCommentsTasks.setMessageLoading("댓글 불러오는중...");
+			showCommentsTasks.setAuthToken(mPreferences.getString("AuthToken",
+					""));
+			showCommentsTasks.execute(SHOW_COMMENTS_ENDPOINT_URL);
 			break;
 
+		}
+	}
+
+	public void addComment(View v) {
+		switch (v.getId()) {
+		case R.id.showCommentEditTextBtn:
+			Button showCommentEditTextBtn = (Button) findViewById(R.id.showCommentEditTextBtn);
+			addCommentEt = (EditText) findViewById(R.id.addCommentEt);
+			Button addCommentSubmitBtn = (Button) findViewById(R.id.addCommentSubmitBtn);
+
+			addCommentEt.setVisibility(EditText.VISIBLE);
+			addCommentSubmitBtn.setVisibility(Button.VISIBLE);
+			showCommentEditTextBtn.setVisibility(Button.INVISIBLE);
+
+			break;
+		case R.id.addCommentSubmitBtn:
+			createCommentTasks createCommentsTasks = new createCommentTasks(
+					PostShowActivity.this);
+			createCommentsTasks.setMessageLoading("댓글 추가 중...");
+			createCommentsTasks.setAuthToken(mPreferences.getString(
+					"AuthToken", ""));
+			createCommentsTasks
+					.execute(NetworkInfo.CREATE_COMMENT_ENDPOINT_URL);
+
+			break;
 		}
 	}
 
@@ -282,6 +305,23 @@ public class PostShowActivity extends SherlockActivity {
 						"comments");
 				JSONObject jsonTask = new JSONObject();
 				int length = jsonTasks.length();
+
+				if (length > 5) {
+					final ScrollView post_show_scrollView = (ScrollView) findViewById(R.id.post_show_scrollView);
+					commentsShowListView
+							.setOnTouchListener(new OnTouchListener() {
+
+								public boolean onTouch(View v, MotionEvent event) {
+
+									post_show_scrollView
+											.requestDisallowInterceptTouchEvent(true);
+
+									return false;
+
+								}
+
+							});
+				}
 				final ArrayList<Comment> commentsArray = new ArrayList<Comment>(
 						length);
 
@@ -301,18 +341,99 @@ public class PostShowActivity extends SherlockActivity {
 							jsonTask.getString("contents"), updated_time));
 				}
 
-				ListView commentsShowListView = (ListView) findViewById(R.id.comments_show_list);
-
 				if (commentsShowListView != null) {
 					commentsShowListView.setAdapter(new CommentAdapter(
 							PostShowActivity.this, commentsArray));
 				}
 
 			} catch (Exception e) {
-				Toast.makeText(context, "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG).show();
+				Toast.makeText(context, "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG)
+						.show();
 			} finally {
-				
+
 				super.onPostExecute(json);
+			}
+		}
+	}
+
+	private class createCommentTasks extends UrlJsonAsyncTask {
+		public createCommentTasks(Context context) {
+			super(context);
+		}
+
+		@Override
+		protected JSONObject doInBackground(String... urls) {
+			DefaultHttpClient client = new DefaultHttpClient();
+			HttpPost post = new HttpPost(urls[0]);
+			JSONObject holder = new JSONObject();
+			JSONObject taskObj = new JSONObject();
+			String response = null;
+			JSONObject json = new JSONObject();
+
+			try {
+				try {
+					json.put("success", false);
+					json.put("info", "인터넷 연결을 확인해 주세요.");
+					taskObj.put("author",
+							mPreferences.getString("userName", ""));
+					taskObj.put("contents", addCommentEt.getText().toString());
+					taskObj.put("post_id", mPostId);
+					taskObj.put("user_id", mPreferences.getInt("userId", 0));
+					holder.put("comment", taskObj);
+					StringEntity se = new StringEntity(holder.toString(),
+							"utf-8");
+					post.setEntity(se);
+					post.setHeader("Accept", "application/json");
+					post.setHeader("Content-Type", "application/json");
+					post.setHeader("Authorization", "Token token="
+							+ mPreferences.getString("AuthToken", ""));
+
+					ResponseHandler<String> responseHandler = new BasicResponseHandler();
+					response = client.execute(post, responseHandler);
+					json = new JSONObject(response);
+
+				} catch (HttpResponseException e) {
+					e.printStackTrace();
+					Log.e("ClientProtocol", "" + e);
+				} catch (IOException e) {
+					e.printStackTrace();
+					Log.e("IO", "" + e);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Log.e("JSON", "" + e);
+			}
+
+			return json;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			try {
+				if (json.getBoolean("success")) {
+					showCommentsTasks showCommentsTasks = new showCommentsTasks(
+							PostShowActivity.this);
+					showCommentsTasks.setMessageLoading("댓글 불러오는중...");
+					showCommentsTasks.setAuthToken(mPreferences.getString(
+							"AuthToken", ""));
+					showCommentsTasks.execute(SHOW_COMMENTS_ENDPOINT_URL);
+
+					Intent intent = new Intent(PostShowActivity.this, PostShowActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+					intent.putExtra("title", mPostTitle);
+					intent.putExtra("description", mPostDescription);
+					intent.putExtra("post_id", mPostId);
+					startActivity(intent);
+				}
+				Toast.makeText(context, json.getString("info"),
+						Toast.LENGTH_LONG).show();
+			} catch (Exception e) {
+				Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG)
+						.show();
+			} finally {
+				super.onPostExecute(json);
+				finish();
 			}
 		}
 	}

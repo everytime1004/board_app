@@ -13,7 +13,10 @@
     <string name="boardSellCompleteBtnText">판매 완료</string>
     <string name="postShowTitle">제목</string>
     <string name="postShowComments">댓글</string>
-    <string name="postShowCommentsBtn">댓글보기</string>
+    <string name="postShowCommentsBtn">댓글 보기</string>
+    <string name="showCommentEditTextBtn">댓글 달기</string>
+    <string name="addCommentEditTextHint">댓글을 입력해주세요.</string>
+    <string name="addCommentSubmitBtnText">확인</string>
     <string name="postShowDescription">내용</string>
     <string name="postShowShowPicture">사진 보기</string>
     <string name="login">로그인</string>

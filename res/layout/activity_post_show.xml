@@ -1,7 +1,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:id="@+id/post_show_scrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true"
+    tools:context=".PostShow" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -108,13 +111,44 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="450dp"
             android:orientation="vertical" >
 
             <ListView
                 android:id="@+id/comments_show_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="250dp"
+                android:choiceMode="none"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:longClickable="false" />
+
+            <Button
+                android:id="@+id/showCommentEditTextBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:onClick="addComment"
+                android:text="@string/showCommentEditTextBtn"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/addCommentEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="@string/addCommentEditTextHint"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/addCommentSubmitBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:onClick="addComment"
+                android:text="@string/addCommentSubmitBtnText"
+                android:visibility="invisible" />
         </LinearLayout>
     </LinearLayout>
 
