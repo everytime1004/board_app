@@ -83,7 +83,7 @@ public class PostShowActivity extends SherlockActivity {
 		mPostTitle = taskIntent.getStringExtra("title");
 		mPostDescription = taskIntent.getStringExtra("description");
 		mPostId = taskIntent.getIntExtra("post_id", 0);
-		
+
 		task_show_title.setText(mPostTitle);
 		task_show_description.setText(mPostDescription);
 
@@ -347,10 +347,9 @@ public class PostShowActivity extends SherlockActivity {
 				}
 
 			} catch (Exception e) {
-				Toast.makeText(context, "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG)
+				Toast.makeText(context, "댓글이 없습니다.", Toast.LENGTH_LONG)
 						.show();
 			} finally {
-
 				super.onPostExecute(json);
 			}
 		}
@@ -418,7 +417,8 @@ public class PostShowActivity extends SherlockActivity {
 							"AuthToken", ""));
 					showCommentsTasks.execute(SHOW_COMMENTS_ENDPOINT_URL);
 
-					Intent intent = new Intent(PostShowActivity.this, PostShowActivity.class);
+					Intent intent = new Intent(PostShowActivity.this,
+							PostShowActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 					intent.putExtra("title", mPostTitle);
