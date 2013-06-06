@@ -25,10 +25,10 @@ public class CommentRow extends LinearLayout {
 		comment_contents.setText(mComment.getContents());
 
 		comment_author = (TextView) findViewById(R.id.comment_author);
-		comment_author.setText("작성자 : " + mComment.getAuthor());
+		comment_author.setText("작성자 : " + mComment.getAuthor() + " ");
 
 		comment_updated_day = (TextView) findViewById(R.id.comment_updated_day);
-		comment_updated_day.setText(mComment.getUpdated_time().split(" ")[0]);
+		comment_updated_day.setText(mComment.getUpdated_time().split(" ")[0] + " ");
 
 		comment_updated_time = (TextView) findViewById(R.id.comment_updated_time);
 		comment_updated_time.setText(mComment.getUpdated_time().split(" ")[1] + " "

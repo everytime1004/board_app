@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,9 +34,6 @@ import com.example.board.lib.UrlJsonAsyncTask;
 import com.example.board.model.Comment;
 import com.example.board.model.CommentAdapter;
 import com.example.board.model.NetworkInfo;
-import com.example.board.model.Post;
-import com.example.board.model.PostAdapter;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class PostShowActivity extends SherlockActivity {
 
@@ -46,8 +44,6 @@ public class PostShowActivity extends SherlockActivity {
 	private static String SHOW_COMMENTS_ENDPOINT_URL;
 
 	private SharedPreferences mPreferences;
-
-	private PullToRefreshListView mCommentsList;
 
 	private String[] imageBitMapURL = new String[5];
 
@@ -64,7 +60,6 @@ public class PostShowActivity extends SherlockActivity {
 
 		TextView task_show_title = (TextView) findViewById(R.id.task_show_title);
 		TextView task_show_description = (TextView) findViewById(R.id.task_show_description);
-		mCommentsList = (PullToRefreshListView) findViewById(R.id.comments_show_list);
 
 		Intent taskIntent = getIntent();
 
@@ -306,17 +301,17 @@ public class PostShowActivity extends SherlockActivity {
 							jsonTask.getString("contents"), updated_time));
 				}
 
-				PullToRefreshListView commentsListView = mCommentsList;
-				if (commentsListView != null) {
-					commentsListView.setAdapter(new CommentAdapter(
+				ListView commentsShowListView = (ListView) findViewById(R.id.comments_show_list);
+
+				if (commentsShowListView != null) {
+					commentsShowListView.setAdapter(new CommentAdapter(
 							PostShowActivity.this, commentsArray));
 				}
 
 			} catch (Exception e) {
-				Toast.makeText(context, "댓글이 없습니다.", Toast.LENGTH_LONG).show();
+				Toast.makeText(context, "인터넷 연결을 확인해주세요.", Toast.LENGTH_LONG).show();
 			} finally {
-				mCommentsList.onRefreshComplete();
-
+				
 				super.onPostExecute(json);
 			}
 		}

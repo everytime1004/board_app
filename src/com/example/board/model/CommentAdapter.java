@@ -43,9 +43,9 @@ public class CommentAdapter extends BaseAdapter {
 
 			mCommentTextView.setTitle(mComments.get(position).getContents());
 			mCommentTextView.setCategory("작성자 : "
-					+ mComments.get(position).getAuthor());
+					+ mComments.get(position).getAuthor() + " ");
 			mCommentTextView.setUpdated_day(mComments.get(position).getUpdated_time()
-					.split(" ")[0]);
+					.split(" ")[0] + " ");
 			mCommentTextView.setUpdated_time(mComments.get(position)
 					.getUpdated_time().split(" ")[1]
 					+ " "
