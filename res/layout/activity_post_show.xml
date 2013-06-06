@@ -1,91 +1,124 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostShow" >
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/postShowTitle"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/task_show_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/text_normal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/postShowDescription"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/task_show_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/text_normal" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <TextView
+        <ImageView
+            android:id="@+id/showImage1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/postShowTitle"
-            android:textSize="30sp" />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher"
+            android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/task_show_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/text_normal" />
-
-        <TextView
+        <ImageView
+            android:id="@+id/showImage2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/postShowDescription"
-            android:textSize="30sp" />
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher"
+            android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/task_show_description"
+        <ImageView
+            android:id="@+id/showImage3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/text_normal" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher"
+            android:visibility="invisible" />
 
-            <ImageView
-                android:id="@+id/showImage1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"
-                android:visibility="invisible" />
+        <ImageView
+            android:id="@+id/showImage4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher"
+            android:visibility="invisible" />
 
-            <ImageView
-                android:id="@+id/showImage2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/showImage3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/showImage4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/showImage5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"
-                android:visibility="invisible" />
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/showImage5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher"
+            android:visibility="invisible" />
     </LinearLayout>
 
-</ScrollView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/text_normal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/postShowComments"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/showComments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="showComments"
+        android:text="@string/postShowCommentsBtn"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:id="@+id/comments_show_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:cacheColorHint="#00000000"
+            android:divider="#19000000"
+            android:dividerHeight="4dp"
+            android:fadingEdge="none"
+            android:fastScrollEnabled="false"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false"
+            android:smoothScrollbar="true" />
+    </LinearLayout>
+
+</LinearLayout>

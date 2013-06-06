@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import org.apache.http.client.methods.HttpGet;
 import org.json.JSONArray;
@@ -29,7 +30,12 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.example.board.R;
 import com.example.board.controller.CacheManager;
 import com.example.board.lib.UrlJsonAsyncTask;
+import com.example.board.model.Comment;
+import com.example.board.model.CommentAdapter;
 import com.example.board.model.NetworkInfo;
+import com.example.board.model.Post;
+import com.example.board.model.PostAdapter;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class PostShowActivity extends SherlockActivity {
 
@@ -37,7 +43,11 @@ public class PostShowActivity extends SherlockActivity {
 
 	private static String SHOW_TASK_ENDPOINT_URL;
 
+	private static String SHOW_COMMENTS_ENDPOINT_URL;
+
 	private SharedPreferences mPreferences;
+
+	private PullToRefreshListView mCommentsList;
 
 	private String[] imageBitMapURL = new String[5];
 
@@ -54,6 +64,7 @@ public class PostShowActivity extends SherlockActivity {
 
 		TextView task_show_title = (TextView) findViewById(R.id.task_show_title);
 		TextView task_show_description = (TextView) findViewById(R.id.task_show_description);
+		mCommentsList = (PullToRefreshListView) findViewById(R.id.comments_show_list);
 
 		Intent taskIntent = getIntent();
 
@@ -64,8 +75,11 @@ public class PostShowActivity extends SherlockActivity {
 		SHOW_TASK_ENDPOINT_URL = NetworkInfo.IP + "/api/v1/posts/" + mPostId
 				+ ".json";
 
-		ShowTaskTask showTask = new ShowTaskTask(PostShowActivity.this);
-		showTask.setMessageLoading("Loading task...");
+		SHOW_COMMENTS_ENDPOINT_URL = NetworkInfo.IP + "/api/v1/comments/"
+				+ mPostId + ".json";
+
+		showTaskTasks showTask = new showTaskTasks(PostShowActivity.this);
+		showTask.setMessageLoading("글 불러오는 중...");
 		showTask.setAuthToken(mPreferences.getString("AuthToken", ""));
 		showTask.execute(SHOW_TASK_ENDPOINT_URL);
 	}
@@ -114,8 +128,8 @@ public class PostShowActivity extends SherlockActivity {
 		}
 	}
 
-	private class ShowTaskTask extends UrlJsonAsyncTask {
-		public ShowTaskTask(Context context) {
+	private class showTaskTasks extends UrlJsonAsyncTask {
+		public showTaskTasks(Context context) {
 			super(context);
 		}
 
@@ -242,5 +256,69 @@ public class PostShowActivity extends SherlockActivity {
 			}
 		}
 		return null;
+	}
+
+	/********************************************** 댓글 *********************************************/
+	public void showComments(View v) {
+		switch (v.getId()) {
+		case R.id.showComments:
+			TextView showComments = (TextView) findViewById(R.id.showComments);
+			showComments.setVisibility(TextView.INVISIBLE);
+
+			showCommentsTasks commentsTasks = new showCommentsTasks(
+					PostShowActivity.this);
+			commentsTasks.setMessageLoading("댓글 불러오는중...");
+			commentsTasks.setAuthToken(mPreferences.getString("AuthToken", ""));
+			commentsTasks.execute(SHOW_COMMENTS_ENDPOINT_URL);
+			break;
+
+		}
+	}
+
+	private class showCommentsTasks extends UrlJsonAsyncTask {
+		public showCommentsTasks(Context context) {
+			super(context);
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			try {
+				JSONArray jsonTasks = json.getJSONObject("data").getJSONArray(
+						"comments");
+				JSONObject jsonTask = new JSONObject();
+				int length = jsonTasks.length();
+				final ArrayList<Comment> commentsArray = new ArrayList<Comment>(
+						length);
+
+				for (int i = 0; i < length; i++) {
+					jsonTask = jsonTasks.getJSONObject(i);
+
+					String updated_time = jsonTask.getString("updated_at");
+					// 2013-06-03T06:39:00Z
+
+					String[] updated_time_split = updated_time.split("T");
+
+					updated_time = updated_time_split[0] + " "
+							+ updated_time_split[1].split(":")[0] + "시 "
+							+ updated_time_split[1].split(":")[1] + "분";
+
+					commentsArray.add(new Comment(jsonTask.getString("author"),
+							jsonTask.getString("contents"), updated_time));
+				}
+
+				PullToRefreshListView commentsListView = mCommentsList;
+				if (commentsListView != null) {
+					commentsListView.setAdapter(new CommentAdapter(
+							PostShowActivity.this, commentsArray));
+				}
+
+			} catch (Exception e) {
+				Toast.makeText(context, "댓글이 없습니다.", Toast.LENGTH_LONG).show();
+			} finally {
+				mCommentsList.onRefreshComplete();
+
+				super.onPostExecute(json);
+			}
+		}
 	}
 }
