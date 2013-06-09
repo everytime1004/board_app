@@ -42,8 +42,7 @@ public class PostAdapter extends BaseAdapter {
 			mPostTextView = (PostRow) convertView;
 
 			mPostTextView.setTitle(mPosts.get(position).getTitle());
-			mPostTextView.setCategory("분류 : "
-					+ mPosts.get(position).getCategory());
+
 			mPostTextView.setUpdated_day(mPosts.get(position).getUpdated_time()
 					.split(" ")[0]);
 			mPostTextView.setUpdated_time(mPosts.get(position)

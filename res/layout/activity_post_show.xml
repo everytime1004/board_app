@@ -100,15 +100,6 @@
             android:text="@string/postShowComments"
             android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/showComments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:onClick="showComments"
-            android:text="@string/postShowCommentsBtn"
-            android:textSize="12sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="450dp"
@@ -130,8 +121,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:onClick="addComment"
-                android:text="@string/showCommentEditTextBtn"
-                android:visibility="invisible" />
+                android:text="@string/showCommentEditTextBtn" />
 
             <EditText
                 android:id="@+id/addCommentEt"

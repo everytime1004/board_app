@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -41,7 +42,48 @@ public class HomeActivity extends SherlockActivity {
 		}
 
 		registGCM();
+	}
 
+	//
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		setNotification();
+
+	}
+
+	private void setNotification() {
+
+		Log.d("pushIntent_post_id",
+				String.valueOf(mPreferences.getInt("post_id", 0)));
+
+		if (mPreferences.getInt("post_id", 0) != 0) {
+			try {
+				Intent showIntent = new Intent(this, PostIndexActivity.class);
+				showIntent.putExtra("title",
+						mPreferences.getString("title", ""));
+				showIntent.putExtra("category",
+						mPreferences.getString("category", ""));
+				showIntent.putExtra("description", "");
+				showIntent.putExtra("post_id",
+						mPreferences.getInt("post_id", 0));
+				showIntent.putExtra("isPushIntent", true);
+
+				SharedPreferences.Editor editor = mPreferences.edit();
+				// save the returned auth_token into
+				// the SharedPreferences
+				editor.remove("title");
+				editor.remove("category");
+				editor.remove("description");
+				editor.remove("post_id");
+				editor.commit();
+
+				startActivity(showIntent);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override

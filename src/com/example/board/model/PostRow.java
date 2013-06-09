@@ -25,9 +25,6 @@ public class PostRow extends LinearLayout {
 		task_title = (TextView) findViewById(R.id.task_title);
 		task_title.setText(mPost.getTitle());
 
-		task_category = (TextView) findViewById(R.id.task_category);
-		task_category.setText("분류 : " + mPost.getCategory());
-
 		task_updated_day = (TextView) findViewById(R.id.task_updated_day);
 		task_updated_day.setText(mPost.getUpdated_time().split(" ")[0]);
 

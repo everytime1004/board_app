@@ -22,7 +22,7 @@ import com.google.android.gcm.GCMBaseIntentService;
 public class GCMIntentService extends GCMBaseIntentService {
 
 	private static final String TAG = "GCMIntentService";
-	private SharedPreferences mPreferences = null;
+	public static SharedPreferences mPreferences = null;
 
 	public GCMIntentService() {
 		super(NetworkInfo.PROJECT_ID);
@@ -59,6 +59,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onMessage(Context context, Intent intent) {
 		Bundle b = intent.getExtras();
+		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 		// b = Bundle[{score=asdf, collapse_key=updated_score,
 		// from=180594026587}]
 
@@ -71,9 +72,19 @@ public class GCMIntentService extends GCMBaseIntentService {
 			Log.d(TAG, "onMessage. " + key + " : " + value);
 		}
 
-		Iterator<String> iterator_message = b.keySet().iterator();
-		generateNotification(context,
-				(String) b.get(iterator_message.next().toString()));
+		String message = b.get("message").toString();
+		String title = b.get("title").toString();
+		String category = b.get("category").toString();
+		String description = b.get("description").toString();
+		String post_id = b.get("post_id").toString();
+
+		/**
+		 * eXtra[0] : message eXtra[1] : title eXtra[2] : category eXtra[3] :
+		 * description eXtra[4] : post_id
+		 */
+		String[] eXtra = { message, title, category, description, post_id };
+
+		generateNotification(context, eXtra);
 	}
 
 	@Override
@@ -96,43 +107,18 @@ public class GCMIntentService extends GCMBaseIntentService {
 		return super.onRecoverableError(context, errorId);
 	}
 
-	// private static void generateNotification(Context context, String content,
-	// String[] images, String[] movies) {
-	// int icon = R.drawable.ic_launcher;
-	// long when = System.currentTimeMillis();
-	// NotificationManager notificationManager = (NotificationManager) context
-	// .getSystemService(Context.NOTIFICATION_SERVICE);
-	//
-	// Notification notification = new Notification(icon, content, when);
-	//
-	// String title = context.getString(R.string.app_name);
-	// Intent notificationIntent = new Intent(context, MainActivity.class);
-	//
-	// notificationIntent.putExtra("content", content);
-	// notificationIntent.putExtra("images", images);
-	// notificationIntent.putExtra("movies", movies);
-	//
-	// // set intent so it does not start a new activity
-	// notificationIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-	// | Intent.FLAG_ACTIVITY_CLEAR_TOP
-	// | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-	//
-	// PendingIntent intent = PendingIntent.getActivity(context, 0,
-	// notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-	// notification.setLatestEventInfo(context, title, content, intent);
-	// notification.flags |= Notification.FLAG_AUTO_CANCEL;
-	// notificationManager.notify(0, notification);
-	//
-	// }
-
-	private static void generateNotification(Context context, String message) {
+	/**
+	 * eXtra[0] : message eXtra[1] : title eXtra[2] : category eXtra[3] :
+	 * description eXtra[4] : post_id
+	 */
+	private static void generateNotification(Context context, String[] eXtra) {
 		int icon = R.drawable.ic_launcher;
 		long when = System.currentTimeMillis();
 
 		NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		Notification notification = new Notification(icon, message, when);
+		Notification notification = new Notification(icon, eXtra[0], when);
 
 		String title = context.getString(R.string.app_name);
 
@@ -143,10 +129,24 @@ public class GCMIntentService extends GCMBaseIntentService {
 				| Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-		PendingIntent intent = PendingIntent.getActivity(context, 0,
-				notificationIntent, 0);
+		// 인텐트에 넣어도 getIntent해도 extra값 못 받아와서 preference이용.....
+		// notificationIntent.putExtra("title", eXtra[1]);
+		// notificationIntent.putExtra("category", eXtra[2]);
+		// notificationIntent.putExtra("description", eXtra[3]);
+		// notificationIntent.putExtra("post_id", Integer.parseInt(eXtra[4]));
 
-		notification.setLatestEventInfo(context, title, message, intent);
+		SharedPreferences.Editor editor = mPreferences.edit();
+		// save the returned auth_token into
+		// the SharedPreferences
+		editor.putString("title", eXtra[1]);
+		editor.putString("category", eXtra[2]);
+		editor.putString("description", eXtra[3]);
+		editor.putInt("post_id", Integer.parseInt(eXtra[4]));
+		editor.commit();
+
+		PendingIntent intent = PendingIntent.getActivity(context, 0,
+				notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		notification.setLatestEventInfo(context, title, eXtra[0], intent);
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		notificationManager.notify(0, notification);
 	}

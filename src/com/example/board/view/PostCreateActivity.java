@@ -13,8 +13,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -83,26 +85,72 @@ public class PostCreateActivity extends SherlockActivity {
 	private class addImageBtnListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			// imageNum = 이미지 개수
-			int add_image_flag = 0; // 몇 번째에 사진을 추가 할지 경정
-			int max_flag = 0;
 
-			for (int t = 1; t < 50; t++) {
-				if (imageId_arr[t - 1] == 0) {
-					add_image_flag = t;
-					break;
-				} else if (imageId_arr[t - 1] > 0) {
-					max_flag++;
-				}
+			final View view = v;
 
-			}
-			if (max_flag != 5) {
-				getImageFromGallery(add_image_flag);
-			} else {
-				Toast.makeText(v.getContext(), "사진은 5개까지 추가가 가능합니다.",
-						Toast.LENGTH_LONG).show();
-			}
+			AlertDialog.Builder getImageFrom = new AlertDialog.Builder(
+					PostCreateActivity.this);
+			getImageFrom.setTitle("Select:");
+			final CharSequence[] opsChars = {
+					getResources().getString(R.string.takePic),
+					getResources().getString(R.string.openGallery) };
+			getImageFrom.setItems(opsChars,
+					new android.content.DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							if (which == 0) {
+
+								// TODO Auto-generated method stub
+								// imageNum = 이미지 개수
+								int add_image_flag = 0; // 몇 번째에 사진을 추가 할지 경정
+								int max_flag = 0;
+
+								for (int t = 1; t < 50; t++) {
+									if (imageId_arr[t - 1] == 0) {
+										add_image_flag = t;
+										break;
+									} else if (imageId_arr[t - 1] > 0) {
+										max_flag++;
+									}
+
+								}
+								if (max_flag != 5) {
+									getImageFromWhat(add_image_flag, which);
+								} else {
+									Toast.makeText(view.getContext(),
+											"사진은 5개까지 추가가 가능합니다.",
+											Toast.LENGTH_LONG).show();
+								}
+
+							} else if (which == 1) {
+								// TODO Auto-generated method stub
+								// imageNum = 이미지 개수
+								int add_image_flag = 0; // 몇 번째에 사진을 추가 할지 경정
+								int max_flag = 0;
+
+								for (int t = 1; t < 50; t++) {
+									if (imageId_arr[t - 1] == 0) {
+										add_image_flag = t;
+										break;
+									} else if (imageId_arr[t - 1] > 0) {
+										max_flag++;
+									}
+
+								}
+								if (max_flag != 5) {
+									getImageFromWhat(add_image_flag, which);
+								} else {
+									Toast.makeText(view.getContext(),
+											"사진은 5개까지 추가가 가능합니다.",
+											Toast.LENGTH_LONG).show();
+								}
+							}
+							dialog.dismiss();
+						}
+					});
+			getImageFrom.show();
+
 		}
 	}
 
@@ -112,7 +160,29 @@ public class PostCreateActivity extends SherlockActivity {
 			// TODO Auto-generated method stub
 			Log.d("Change Image ID", String.valueOf(v.getId()));
 			isChange = true;
-			getImageFromGallery(v.getId());
+			final int tmpImageId = v.getId();
+
+			AlertDialog.Builder getImageFrom = new AlertDialog.Builder(
+					PostCreateActivity.this);
+			getImageFrom.setTitle("선택하세요");
+			final CharSequence[] opsChars = {
+					getResources().getString(R.string.takePic),
+					getResources().getString(R.string.openGallery) };
+			getImageFrom.setItems(opsChars,
+					new android.content.DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							if (which == 0) {
+								getImageFromWhat(tmpImageId, 0);
+
+							} else if (which == 1) {
+								getImageFromWhat(tmpImageId, 1);
+							}
+							dialog.dismiss();
+						}
+					});
+			getImageFrom.show();
 		}
 	}
 
@@ -211,12 +281,20 @@ public class PostCreateActivity extends SherlockActivity {
 		}
 	}
 
-	public void getImageFromGallery(int imageId) {
-		Intent intent = new Intent(Intent.ACTION_PICK,
-				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		imageId_arr[imageId - 1] = imageId;
-		intent.setType("image/*");
-		startActivityForResult(intent, imageId);
+	public void getImageFromWhat(int imageId, int cameraOrgallery) {
+		if (cameraOrgallery == 1) {
+			Intent galleryIntent = new Intent(
+					Intent.ACTION_PICK,
+					android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+			imageId_arr[imageId - 1] = imageId;
+			galleryIntent.setType("image/*");
+			startActivityForResult(galleryIntent, imageId);
+		} else {
+			Intent cameraIntent = new Intent(
+					android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+			imageId_arr[imageId - 1] = imageId;
+			startActivityForResult(cameraIntent, imageId);
+		}
 	}
 
 	public void saveTask(View button) {

@@ -76,6 +76,15 @@ public class PostIndexActivity extends SherlockActivity {
 			Toast.makeText(this, "로그인을 먼저 해주세요", Toast.LENGTH_LONG).show();
 			finish();
 		}
+
+		if (this.getIntent().getBooleanExtra("isPushIntent", false)) {
+			Intent intent = new Intent(this, PostShowActivity.class);
+			intent.putExtra("title", this.getIntent().getStringExtra("title"));
+			intent.putExtra("description", this.getIntent().getStringExtra("description"));
+			intent.putExtra("category", this.getIntent().getStringExtra("category"));
+			intent.putExtra("post_id",  this.getIntent().getStringExtra("post_id"));
+			startActivity(intent);
+		}
 	}
 
 	@Override

@@ -99,6 +99,18 @@ public class PostShowActivity extends SherlockActivity {
 		showTask.execute(SHOW_TASK_ENDPOINT_URL);
 	}
 
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+
+		showCommentsTasks showCommentsTasks = new showCommentsTasks(
+				PostShowActivity.this);
+		showCommentsTasks.setMessageLoading("댓글 불러오는중...");
+		showCommentsTasks.setAuthToken(mPreferences.getString("AuthToken", ""));
+		showCommentsTasks.execute(SHOW_COMMENTS_ENDPOINT_URL);
+	}
+
 	class BitmapDownloaderTask extends AsyncTask<String, Void, Boolean> {
 
 		public BitmapDownloaderTask() {
@@ -248,26 +260,7 @@ public class PostShowActivity extends SherlockActivity {
 	}
 
 	/********************************************** 댓글 *********************************************/
-	public void showComments(View v) {
-		switch (v.getId()) {
-		case R.id.showComments:
-			TextView showComments = (TextView) findViewById(R.id.showComments);
-			showComments.setVisibility(TextView.INVISIBLE);
-
-			Button addCommentBtn = (Button) findViewById(R.id.showCommentEditTextBtn);
-			addCommentBtn.setVisibility(Button.VISIBLE);
-
-			showCommentsTasks showCommentsTasks = new showCommentsTasks(
-					PostShowActivity.this);
-			showCommentsTasks.setMessageLoading("댓글 불러오는중...");
-			showCommentsTasks.setAuthToken(mPreferences.getString("AuthToken",
-					""));
-			showCommentsTasks.execute(SHOW_COMMENTS_ENDPOINT_URL);
-			break;
-
-		}
-	}
-
+	
 	public void addComment(View v) {
 		switch (v.getId()) {
 		case R.id.showCommentEditTextBtn:
@@ -347,8 +340,7 @@ public class PostShowActivity extends SherlockActivity {
 				}
 
 			} catch (Exception e) {
-				Toast.makeText(context, "댓글이 없습니다.", Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(context, "댓글이 없습니다.", Toast.LENGTH_LONG).show();
 			} finally {
 				super.onPostExecute(json);
 			}
