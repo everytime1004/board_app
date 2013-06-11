@@ -43,16 +43,16 @@
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="1"
-            android:onClick="showBoard"
-            android:text="@string/boardSellCompleteBtnText" />
+            android:background="@drawable/idios_sellcomplete"
+            android:onClick="showBoard" />
 
         <Button
             android:id="@+id/boardInquiryBtn"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="1"
-            android:onClick="showBoard"
-            android:background="@drawable/idios_inqury" />
+            android:background="@drawable/idios_inqury"
+            android:onClick="showBoard" />
     </LinearLayout>
 
     <LinearLayout
@@ -66,8 +66,8 @@
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="1"
-            android:onClick="showBoard"
-            android:text="@string/setting" />
+            android:background="@drawable/idios_setting"
+            android:onClick="showBoard" />
     </LinearLayout>
 
 </LinearLayout>

@@ -1092,9 +1092,11 @@ containing a value of this type.
         public static final int idios_high=0x7f02007a;
         public static final int idios_inqury=0x7f02007b;
         public static final int idios_sell=0x7f02007c;
-        public static final int indicator_arrow=0x7f02007d;
-        public static final int indicator_bg_bottom=0x7f02007e;
-        public static final int indicator_bg_top=0x7f02007f;
+        public static final int idios_sellcomplete=0x7f02007d;
+        public static final int idios_setting=0x7f02007e;
+        public static final int indicator_arrow=0x7f02007f;
+        public static final int indicator_bg_bottom=0x7f020080;
+        public static final int indicator_bg_top=0x7f020081;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f05002f;
