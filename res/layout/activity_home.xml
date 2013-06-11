@@ -20,16 +20,16 @@
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="1"
-            android:onClick="showBoard"
-            android:text="@string/boardBuyBtnText" />
+            android:background="@drawable/idios_buy"
+            android:onClick="showBoard" />
 
         <Button
             android:id="@+id/boardSellBtn"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="1"
-            android:onClick="showBoard"
-            android:text="@string/boardSellBtnText" />
+            android:background="@drawable/idios_sell"
+            android:onClick="showBoard" />
     </LinearLayout>
 
     <LinearLayout
@@ -52,9 +52,9 @@
             android:layout_height="100dp"
             android:layout_weight="1"
             android:onClick="showBoard"
-            android:text="@string/boardInquiryBtnText" />
+            android:background="@drawable/idios_inqury" />
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

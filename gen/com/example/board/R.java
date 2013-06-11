@@ -1088,9 +1088,13 @@ containing a value of this type.
         public static final int default_ptr_flip=0x7f020076;
         public static final int default_ptr_rotate=0x7f020077;
         public static final int ic_launcher=0x7f020078;
-        public static final int indicator_arrow=0x7f020079;
-        public static final int indicator_bg_bottom=0x7f02007a;
-        public static final int indicator_bg_top=0x7f02007b;
+        public static final int idios_buy=0x7f020079;
+        public static final int idios_high=0x7f02007a;
+        public static final int idios_inqury=0x7f02007b;
+        public static final int idios_sell=0x7f02007c;
+        public static final int indicator_arrow=0x7f02007d;
+        public static final int indicator_bg_bottom=0x7f02007e;
+        public static final int indicator_bg_top=0x7f02007f;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f05002f;
