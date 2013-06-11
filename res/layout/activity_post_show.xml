@@ -30,6 +30,22 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/postShowAuthor"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/task_show_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text_normal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/postShowDescription"
             android:textSize="30sp" />
 

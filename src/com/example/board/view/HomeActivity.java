@@ -53,12 +53,21 @@ public class HomeActivity extends SherlockActivity {
 
 	}
 
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// TODO Auto-generated method stub
+		super.onNewIntent(intent);
+
+		setIntent(intent);
+	}
+
 	private void setNotification() {
+		Intent intent = this.getIntent();
 
 		Log.d("pushIntent_post_id",
 				String.valueOf(mPreferences.getInt("post_id", 0)));
 
-		if (mPreferences.getInt("post_id", 0) != 0) {
+		if (mPreferences.contains("post_id")) {
 			try {
 				Intent showIntent = new Intent(this, PostIndexActivity.class);
 				showIntent.putExtra("title",
@@ -195,19 +204,19 @@ public class HomeActivity extends SherlockActivity {
 
 		switch (v.getId()) {
 		case R.id.boardBuyBtn:
-			showIntent.putExtra("category", "삽니다");
+			showIntent.putExtra("category", "buy");
 			startActivity(showIntent);
 			break;
 		case R.id.boardSellBtn:
-			showIntent.putExtra("category", "팝니다");
+			showIntent.putExtra("category", "sell");
 			startActivity(showIntent);
 			break;
 		case R.id.boardInquiryBtn:
-			showIntent.putExtra("category", "문의 및 견적의뢰");
+			showIntent.putExtra("category", "inquiry");
 			startActivity(showIntent);
 			break;
 		case R.id.boardSellCompleteBtn:
-			showIntent.putExtra("category", "판매 완료");
+			showIntent.putExtra("category", "sellComplete");
 			startActivity(showIntent);
 			break;
 		case R.id.settingBtn:

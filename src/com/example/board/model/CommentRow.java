@@ -2,6 +2,7 @@ package com.example.board.model;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ public class CommentRow extends LinearLayout {
 	private TextView comment_author;
 	private TextView comment_updated_day;
 	private TextView comment_updated_time;
+	private Button commentDeleteBtn;
 
 	public CommentRow(Context context, Comment mComment) {
 		super(context);
@@ -28,11 +30,20 @@ public class CommentRow extends LinearLayout {
 		comment_author.setText("작성자 : " + mComment.getAuthor() + " ");
 
 		comment_updated_day = (TextView) findViewById(R.id.comment_updated_day);
-		comment_updated_day.setText(mComment.getUpdated_time().split(" ")[0] + " ");
+		comment_updated_day.setText(mComment.getUpdated_time().split(" ")[0]
+				+ " ");
 
 		comment_updated_time = (TextView) findViewById(R.id.comment_updated_time);
-		comment_updated_time.setText(mComment.getUpdated_time().split(" ")[1] + " "
-				+ mComment.getUpdated_time().split(" ")[2]);
+		comment_updated_time.setText(mComment.getUpdated_time().split(" ")[1]
+				+ " " + mComment.getUpdated_time().split(" ")[2]);
+
+		commentDeleteBtn = (Button) findViewById(R.id.commentDeleteBtn);
+		if (mComment.getIsOwner()) {
+			setDeleteBtn(true);
+		} else {
+			setDeleteBtn(false);
+		}
+		commentDeleteBtn.setId(mComment.getId());
 
 	}
 
@@ -54,5 +65,13 @@ public class CommentRow extends LinearLayout {
 
 	public void setAuthor(String data) {
 		comment_author.setText(data);
+	}
+
+	public void setDeleteBtn(boolean isOwner) {
+		if (isOwner) {
+			commentDeleteBtn.setVisibility(Button.VISIBLE);
+		} else {
+			commentDeleteBtn.setVisibility(Button.INVISIBLE);
+		}
 	}
 }

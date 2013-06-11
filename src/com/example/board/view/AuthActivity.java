@@ -48,6 +48,8 @@ public class AuthActivity extends SherlockActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		setTitle("로그인");
 
 		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 

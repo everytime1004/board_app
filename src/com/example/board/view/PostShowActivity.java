@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -19,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +32,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +43,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.example.board.R;
 import com.example.board.controller.CacheManager;
 import com.example.board.lib.UrlJsonAsyncTask;
@@ -52,10 +57,14 @@ public class PostShowActivity extends SherlockActivity {
 	private static int mPostId = 0;
 	private static String mPostTitle = "";
 	private static String mPostDescription = "";
+	private static String mCategory = "";
+	private static String mAuthor = "";
 
 	private static String SHOW_TASK_ENDPOINT_URL;
 
 	private static String SHOW_COMMENTS_ENDPOINT_URL;
+
+	private static String DESTORY_TASK_ENDPOINT_URL;
 
 	private SharedPreferences mPreferences;
 
@@ -77,21 +86,28 @@ public class PostShowActivity extends SherlockActivity {
 
 		TextView task_show_title = (TextView) findViewById(R.id.task_show_title);
 		TextView task_show_description = (TextView) findViewById(R.id.task_show_description);
+		TextView task_show_author = (TextView) findViewById(R.id.task_show_author);
 		commentsShowListView = (ListView) findViewById(R.id.comments_show_list);
 
 		Intent taskIntent = getIntent();
 		mPostTitle = taskIntent.getStringExtra("title");
 		mPostDescription = taskIntent.getStringExtra("description");
 		mPostId = taskIntent.getIntExtra("post_id", 0);
+		mCategory = taskIntent.getStringExtra("category");
+		mAuthor = taskIntent.getStringExtra("author");
 
 		task_show_title.setText(mPostTitle);
 		task_show_description.setText(mPostDescription);
+		task_show_author.setText(mAuthor);
 
 		SHOW_TASK_ENDPOINT_URL = NetworkInfo.IP + "/api/v1/posts/" + mPostId
 				+ ".json";
 
 		SHOW_COMMENTS_ENDPOINT_URL = NetworkInfo.IP + "/api/v1/comments/"
 				+ mPostId + ".json";
+
+		DESTORY_TASK_ENDPOINT_URL = NetworkInfo.IP + "/api/v1/posts/" + mPostId
+				+ ".json";
 
 		showTaskTasks showTask = new showTaskTasks(PostShowActivity.this);
 		showTask.setMessageLoading("글 불러오는 중...");
@@ -106,9 +122,73 @@ public class PostShowActivity extends SherlockActivity {
 
 		showCommentsTasks showCommentsTasks = new showCommentsTasks(
 				PostShowActivity.this);
-		showCommentsTasks.setMessageLoading("댓글 불러오는중...");
 		showCommentsTasks.setAuthToken(mPreferences.getString("AuthToken", ""));
 		showCommentsTasks.execute(SHOW_COMMENTS_ENDPOINT_URL);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getSupportMenuInflater().inflate(R.menu.show, menu);
+
+		if (mPreferences.getString("userName", "").equals(mAuthor)) {
+			menu.findItem(R.id.action_create_delete).setVisible(true);
+		} else {
+			menu.findItem(R.id.action_create_delete).setVisible(false);
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_create_delete:
+			final Dialog dialog = new Dialog(PostShowActivity.this);
+			dialog.setContentView(R.layout.task_remove_input);
+			dialog.setTitle("삭제하시겠습니까?");
+
+			// 취소 버튼
+			((Button) dialog.findViewById(R.id.todayCancelBtn))
+					.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							dialog.dismiss();
+						}
+					});
+			// 저장 버튼
+			((Button) dialog.findViewById(R.id.todayInputBtn))
+					.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Toast.makeText(getApplicationContext(), "삭제했습니다.",
+									Toast.LENGTH_SHORT).show();
+
+							DestroyTaskTasks destroyTaskTasks = new DestroyTaskTasks(
+									PostShowActivity.this);
+							destroyTaskTasks.setMessageLoading("글 삭제중...");
+							// destroyTaskTasks.setAuthToken(mPreferences
+							// .getString("AuthToken", ""));
+							destroyTaskTasks.execute(DESTORY_TASK_ENDPOINT_URL);
+
+							Intent deleteTaskIntent = new Intent(
+									getApplicationContext(),
+									PostIndexActivity.class);
+							deleteTaskIntent.putExtra("category", mCategory);
+							deleteTaskIntent
+									.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							deleteTaskIntent
+									.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+							startActivity(deleteTaskIntent);
+
+							dialog.dismiss();
+						}
+					});
+			dialog.show();
+			break;
+		}
+
+		return true;
 	}
 
 	class BitmapDownloaderTask extends AsyncTask<String, Void, Boolean> {
@@ -151,6 +231,72 @@ public class PostShowActivity extends SherlockActivity {
 					showImage[k].setImageBitmap(imageBitmap[k]);
 					showImage[k].setVisibility(View.VISIBLE);
 				}
+			}
+		}
+	}
+
+	private class DestroyTaskTasks extends UrlJsonAsyncTask {
+		public DestroyTaskTasks(Context context) {
+			super(context);
+		}
+
+		@Override
+		protected JSONObject doInBackground(String... urls) {
+			DefaultHttpClient client = new DefaultHttpClient();
+			HttpDelete delete = new HttpDelete(urls[0]);
+			String response = null;
+			JSONObject json = new JSONObject();
+
+			try {
+				try {
+					// setup the returned values in case
+					// something goes wrong
+					json.put("success", false);
+					json.put("info", "인터넷 연결을 다시 확인해 주세요.");
+
+					// add the users's info to the post params
+
+					// "authenticity_token", mPreferences.getString("AuthToken",
+					// "")
+
+					// setup the request headers
+					delete.setHeader("Authorization", "Token token=\""
+							+ mPreferences.getString("AuthToken", "") + "\"");
+					delete.setHeader("Accept", "application/json");
+					delete.setHeader("Content-Type", "application/json");
+
+					ResponseHandler<String> responseHandler = new BasicResponseHandler();
+					response = client.execute(delete, responseHandler);
+					json = new JSONObject(response);
+
+				} catch (HttpResponseException e) {
+					e.printStackTrace();
+					Log.e("ClientProtocol", "" + e);
+				} catch (IOException e) {
+					e.printStackTrace();
+					Log.e("IO", "" + e);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Log.e("JSON", "" + e);
+			}
+
+			return json;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			try {
+				if (json.getBoolean("success")) {
+					Toast.makeText(context, json.getString("info"),
+							Toast.LENGTH_LONG).show();
+				}
+
+			} catch (Exception e) {
+				Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG)
+						.show();
+			} finally {
+				super.onPostExecute(json);
 			}
 		}
 	}
@@ -260,7 +406,7 @@ public class PostShowActivity extends SherlockActivity {
 	}
 
 	/********************************************** 댓글 *********************************************/
-	
+
 	public void addComment(View v) {
 		switch (v.getId()) {
 		case R.id.showCommentEditTextBtn:
@@ -284,6 +430,57 @@ public class PostShowActivity extends SherlockActivity {
 
 			break;
 		}
+	}
+
+	public void deleteComment(View v) {
+		final Dialog dialog = new Dialog(PostShowActivity.this);
+		dialog.setContentView(R.layout.task_remove_input);
+		dialog.setTitle("삭제하시겠습니까?");
+
+		final int mCommentId = v.getId();
+
+		// 취소 버튼
+		((Button) dialog.findViewById(R.id.todayCancelBtn))
+				.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						dialog.dismiss();
+					}
+				});
+		// 저장 버튼
+		((Button) dialog.findViewById(R.id.todayInputBtn))
+				.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Toast.makeText(getApplicationContext(), "삭제했습니다.",
+								Toast.LENGTH_SHORT).show();
+
+						String DESTORY_COMMENT_ENDPOINT_URL = null;
+						DESTORY_COMMENT_ENDPOINT_URL = NetworkInfo.IP
+								+ "/api/v1/comments/" + mCommentId + ".json";
+
+						DestroyCommentTasks destroyCommentTasks = new DestroyCommentTasks(
+								PostShowActivity.this);
+						destroyCommentTasks.setMessageLoading("댓글 삭제중...");
+						destroyCommentTasks.setAuthToken(mPreferences
+								.getString("AuthToken", ""));
+						destroyCommentTasks
+								.execute(DESTORY_COMMENT_ENDPOINT_URL);
+
+						Intent intent = new Intent(PostShowActivity.this,
+								PostShowActivity.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+						intent.putExtra("title", mPostTitle);
+						intent.putExtra("description", mPostDescription);
+						intent.putExtra("post_id", mPostId);
+						intent.putExtra("author", mAuthor);
+						startActivity(intent);
+
+						dialog.dismiss();
+					}
+				});
+		dialog.show();
 	}
 
 	private class showCommentsTasks extends UrlJsonAsyncTask {
@@ -330,8 +527,18 @@ public class PostShowActivity extends SherlockActivity {
 							+ updated_time_split[1].split(":")[0] + "시 "
 							+ updated_time_split[1].split(":")[1] + "분";
 
-					commentsArray.add(new Comment(jsonTask.getString("author"),
-							jsonTask.getString("contents"), updated_time));
+					if (mPreferences.getString("userName", "").equals(
+							jsonTask.getString("author"))) {
+						commentsArray.add(new Comment(jsonTask.getInt("id"),
+								jsonTask.getString("author"), jsonTask
+										.getString("contents"), updated_time,
+								true));
+					} else {
+						commentsArray.add(new Comment(jsonTask.getInt("id"),
+								jsonTask.getString("author"), jsonTask
+										.getString("contents"), updated_time,
+								false));
+					}
 				}
 
 				if (commentsShowListView != null) {
@@ -343,6 +550,83 @@ public class PostShowActivity extends SherlockActivity {
 				Toast.makeText(context, "댓글이 없습니다.", Toast.LENGTH_LONG).show();
 			} finally {
 				super.onPostExecute(json);
+			}
+		}
+	}
+
+	private class DestroyCommentTasks extends UrlJsonAsyncTask {
+		public DestroyCommentTasks(Context context) {
+			super(context);
+		}
+
+		@Override
+		protected JSONObject doInBackground(String... urls) {
+			DefaultHttpClient client = new DefaultHttpClient();
+			HttpDelete delete = new HttpDelete(urls[0]);
+			String response = null;
+			JSONObject json = new JSONObject();
+
+			try {
+				try {
+					// setup the returned values in case
+					// something goes wrong
+					json.put("success", false);
+					json.put("info", "인터넷 연결을 다시 확인해 주세요.");
+
+					// setup the request headers
+					delete.setHeader("Authorization", "Token token=\""
+							+ mPreferences.getString("AuthToken", "") + "\"");
+					delete.setHeader("Accept", "application/json");
+					delete.setHeader("Content-Type", "application/json");
+
+					ResponseHandler<String> responseHandler = new BasicResponseHandler();
+					response = client.execute(delete, responseHandler);
+					json = new JSONObject(response);
+
+				} catch (HttpResponseException e) {
+					e.printStackTrace();
+					Log.e("ClientProtocol", "" + e);
+				} catch (IOException e) {
+					e.printStackTrace();
+					Log.e("IO", "" + e);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Log.e("JSON", "" + e);
+			}
+
+			return json;
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			try {
+				if (json.getBoolean("success")) {
+					showCommentsTasks showCommentsTasks = new showCommentsTasks(
+							PostShowActivity.this);
+					showCommentsTasks.setMessageLoading("댓글 불러오는중...");
+					showCommentsTasks.setAuthToken(mPreferences.getString(
+							"AuthToken", ""));
+					showCommentsTasks.execute(SHOW_COMMENTS_ENDPOINT_URL);
+
+					Intent intent = new Intent(PostShowActivity.this,
+							PostShowActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+					intent.putExtra("title", mPostTitle);
+					intent.putExtra("description", mPostDescription);
+					intent.putExtra("post_id", mPostId);
+					intent.putExtra("author", mAuthor);
+					startActivity(intent);
+				}
+				Toast.makeText(context, json.getString("info"),
+						Toast.LENGTH_LONG).show();
+			} catch (Exception e) {
+				Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG)
+						.show();
+			} finally {
+				super.onPostExecute(json);
+				finish();
 			}
 		}
 	}
@@ -416,6 +700,7 @@ public class PostShowActivity extends SherlockActivity {
 					intent.putExtra("title", mPostTitle);
 					intent.putExtra("description", mPostDescription);
 					intent.putExtra("post_id", mPostId);
+					intent.putExtra("author", mAuthor);
 					startActivity(intent);
 				}
 				Toast.makeText(context, json.getString("info"),

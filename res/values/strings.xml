@@ -18,10 +18,12 @@
     <string name="addCommentEditTextHint">댓글을 입력해주세요.</string>
     <string name="addCommentSubmitBtnText">확인</string>
     <string name="postShowDescription">내용</string>
+    <string name="postShowAuthor">작성자</string>
     <string name="postShowShowPicture">사진 보기</string>
     <string name="login">로그인</string>
     <string name="logout">로그아웃</string>
     <string name="create_task">글 쓰기</string>
+    <string name="delete_task">글 삭제</string>
     <string name="setting">환경 설정</string>
     <string name="registeration">회원 가입</string>
     <string name="loginIdHint">이메일를 입력해주세요</string>
@@ -29,7 +31,7 @@
     <string name="addImageBtnText">사진 추가</string>
     <string name="cancel">취소</string>
     <string name="remove">삭제</string>
-    <string name = "takePic">카메라</string>
-    <string name = "openGallery">앨범</string>
+    <string name="takePic">카메라</string>
+    <string name="openGallery">앨범</string>
 
 </resources>

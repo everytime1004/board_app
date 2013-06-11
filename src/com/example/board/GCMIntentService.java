@@ -130,10 +130,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 				| Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 		// 인텐트에 넣어도 getIntent해도 extra값 못 받아와서 preference이용.....
-		// notificationIntent.putExtra("title", eXtra[1]);
-		// notificationIntent.putExtra("category", eXtra[2]);
-		// notificationIntent.putExtra("description", eXtra[3]);
-		// notificationIntent.putExtra("post_id", Integer.parseInt(eXtra[4]));
+//		notificationIntent.putExtra("title", eXtra[1]);
+//		notificationIntent.putExtra("category", eXtra[2]);
+//		notificationIntent.putExtra("description", eXtra[3]);
+//		notificationIntent.putExtra("post_id", Integer.parseInt(eXtra[4]));
 
 		SharedPreferences.Editor editor = mPreferences.edit();
 		// save the returned auth_token into

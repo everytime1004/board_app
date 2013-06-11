@@ -35,6 +35,7 @@ public class CommentAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+
 		CommentRow mCommentTextView;
 		if (convertView == null) {
 			mCommentTextView = new CommentRow(mContext, mComments.get(position));
@@ -44,12 +45,15 @@ public class CommentAdapter extends BaseAdapter {
 			mCommentTextView.setTitle(mComments.get(position).getContents());
 			mCommentTextView.setCategory("작성자 : "
 					+ mComments.get(position).getAuthor() + " ");
-			mCommentTextView.setUpdated_day(mComments.get(position).getUpdated_time()
-					.split(" ")[0] + " ");
+			mCommentTextView.setUpdated_day(mComments.get(position)
+					.getUpdated_time().split(" ")[0]
+					+ " ");
 			mCommentTextView.setUpdated_time(mComments.get(position)
 					.getUpdated_time().split(" ")[1]
 					+ " "
 					+ mComments.get(position).getUpdated_time().split(" ")[2]);
+
+			mCommentTextView.setDeleteBtn(true);
 		}
 
 		return mCommentTextView;

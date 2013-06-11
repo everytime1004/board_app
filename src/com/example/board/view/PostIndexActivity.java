@@ -25,6 +25,7 @@ import com.example.board.model.NetworkInfo;
 import com.example.board.model.Post;
 import com.example.board.model.PostAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -35,6 +36,12 @@ public class PostIndexActivity extends SherlockActivity {
 	private String mCategory = null;
 
 	private PullToRefreshListView mPullRefreshListView;
+
+	private ArrayList<Post> tasksArray = new ArrayList<Post>();
+	
+	private PostAdapter postAdapter;
+	
+	private int offset_id = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +67,25 @@ public class PostIndexActivity extends SherlockActivity {
 						// Update the LastUpdatedLabel
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
+						
+						tasksArray.clear();
+						postAdapter.notifyDataSetChanged();
 
 						// Do work to refresh the list here.
-						loadPostFromServer(NetworkInfo.TASKS_URL, mCategory);
+						loadPostFromServer(NetworkInfo.TASKS_URL);
+					}
+				});
+
+		// Add an end-of-list listener
+		mPullRefreshListView
+				.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+
+					@Override
+					public void onLastItemVisible() {
+						GetMorePostsTask getMorePostsTask = new GetMorePostsTask(PostIndexActivity.this);
+						getMorePostsTask.setMessageLoading("글들을 불러오는 중입니다...");
+						getMorePostsTask.setAuthToken(mPreferences.getString("AuthToken", ""));
+						getMorePostsTask.execute(NetworkInfo.TASKS_URL + "?category=" + mCategory + "&" + "offset_id=" + offset_id);
 					}
 				});
 
@@ -71,7 +94,7 @@ public class PostIndexActivity extends SherlockActivity {
 		mPreferences = getSharedPreferences("AuthToken", MODE_PRIVATE);
 
 		if (mPreferences.contains("AuthToken")) {
-			loadPostFromServer(NetworkInfo.TASKS_URL, mCategory);
+			loadPostFromServer(NetworkInfo.TASKS_URL);
 		} else {
 			Toast.makeText(this, "로그인을 먼저 해주세요", Toast.LENGTH_LONG).show();
 			finish();
@@ -80,9 +103,12 @@ public class PostIndexActivity extends SherlockActivity {
 		if (this.getIntent().getBooleanExtra("isPushIntent", false)) {
 			Intent intent = new Intent(this, PostShowActivity.class);
 			intent.putExtra("title", this.getIntent().getStringExtra("title"));
-			intent.putExtra("description", this.getIntent().getStringExtra("description"));
-			intent.putExtra("category", this.getIntent().getStringExtra("category"));
-			intent.putExtra("post_id",  this.getIntent().getStringExtra("post_id"));
+			intent.putExtra("description",
+					this.getIntent().getStringExtra("description"));
+			intent.putExtra("category",
+					this.getIntent().getStringExtra("category"));
+			intent.putExtra("post_id",
+					this.getIntent().getIntExtra("post_id", 0));
 			startActivity(intent);
 		}
 	}
@@ -93,21 +119,18 @@ public class PostIndexActivity extends SherlockActivity {
 		super.onResume();
 	}
 
-	private void loadPostFromServer(String url, String category) {
-		GetPostsTask getPostsTask = new GetPostsTask(PostIndexActivity.this,
-				category);
+	private void loadPostFromServer(String url) {
+		GetPostsTask getPostsTask = new GetPostsTask(PostIndexActivity.this);
 		getPostsTask.setMessageLoading("글들을 불러오는 중입니다...");
 		getPostsTask.setAuthToken(mPreferences.getString("AuthToken", ""));
-		getPostsTask.execute(url);
+		getPostsTask.execute(url + "?category=" + mCategory);
 	}
 
 	// Post 받아 오는 AsyncTask
 	private class GetPostsTask extends UrlJsonAsyncTask {
-		private String category = null;
 
-		public GetPostsTask(Context context, String category) {
+		public GetPostsTask(Context context) {
 			super(context);
-			this.category = category;
 		}
 
 		@Override
@@ -117,32 +140,88 @@ public class PostIndexActivity extends SherlockActivity {
 						"posts");
 				JSONObject jsonTask = new JSONObject();
 				int length = jsonTasks.length();
-				final ArrayList<Post> tasksArray = new ArrayList<Post>(length);
 
 				for (int i = 0; i < length; i++) {
 					jsonTask = jsonTasks.getJSONObject(i);
 
-					if (category.equals(jsonTask.getString("category"))
-							|| jsonTask.getString("category").equals("공지사항")) {
+					String author = jsonTask.getString("author");
 
-						String author = jsonTask.getString("author");
+					String updated_time = jsonTask.getString("updated_at");
+					// 2013-06-03T06:39:00Z
 
-						String updated_time = jsonTask.getString("updated_at");
-						// 2013-06-03T06:39:00Z
+					String[] updated_time_split = updated_time.split("T");
 
-						String[] updated_time_split = updated_time.split("T");
+					updated_time = updated_time_split[0] + " "
+							+ updated_time_split[1].split(":")[0] + "시 "
+							+ updated_time_split[1].split(":")[1] + "분";
 
-						updated_time = updated_time_split[0] + " "
-								+ updated_time_split[1].split(":")[0] + "시 "
-								+ updated_time_split[1].split(":")[1] + "분";
-
-						tasksArray
-								.add(new Post(jsonTask.getInt("id"), jsonTask
-										.getString("title"), jsonTask
-										.getString("category"), jsonTask
-										.getString("description"),
-										updated_time, author));
+					tasksArray.add(new Post(jsonTask.getInt("id"), jsonTask
+							.getString("title"),
+							jsonTask.getString("category"), jsonTask
+									.getString("description"), updated_time,
+							author));
+					
+					if( i == length -1){
+						offset_id = jsonTask.getInt("id");
 					}
+
+				}
+
+				PullToRefreshListView tasksListView = mPullRefreshListView;
+				if (tasksListView != null) {
+					postAdapter = new PostAdapter(PostIndexActivity.this, tasksArray);
+					tasksListView.setAdapter(postAdapter);
+				}
+				tasksListView.setOnItemClickListener(new TasklistListener());
+			} catch (Exception e) {
+				Toast.makeText(context, "게시물이 없습니다.", Toast.LENGTH_LONG).show();
+			} finally {
+				mPullRefreshListView.onRefreshComplete();
+
+				super.onPostExecute(json);
+			}
+		}
+	}
+
+	// Post 받아 오는 AsyncTask
+	private class GetMorePostsTask extends UrlJsonAsyncTask {
+
+		public GetMorePostsTask(Context context) {
+			super(context);
+		}
+
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			try {
+				JSONArray jsonTasks = json.getJSONObject("data").getJSONArray(
+						"posts");
+				JSONObject jsonTask = new JSONObject();
+				int length = jsonTasks.length();
+
+				for (int i = 0; i < length; i++) {
+					jsonTask = jsonTasks.getJSONObject(i);
+
+					String author = jsonTask.getString("author");
+
+					String updated_time = jsonTask.getString("updated_at");
+					// 2013-06-03T06:39:00Z
+
+					String[] updated_time_split = updated_time.split("T");
+
+					updated_time = updated_time_split[0] + " "
+							+ updated_time_split[1].split(":")[0] + "시 "
+							+ updated_time_split[1].split(":")[1] + "분";
+
+					tasksArray.add(new Post(jsonTask.getInt("id"), jsonTask
+							.getString("title"),
+							jsonTask.getString("category"), jsonTask
+									.getString("description"), updated_time,
+							author));
+					
+					if( i == length -1){
+						offset_id = jsonTask.getInt("id");
+					}
+
 				}
 
 				PullToRefreshListView tasksListView = mPullRefreshListView;
@@ -173,6 +252,8 @@ public class PostIndexActivity extends SherlockActivity {
 			intent.putExtra("title", post.getTitle());
 			intent.putExtra("description", post.getDescription());
 			intent.putExtra("post_id", post.getId());
+			intent.putExtra("category", post.getCategory());
+			intent.putExtra("author", post.getAuthor());
 			startActivity(intent);
 
 		}
@@ -181,7 +262,7 @@ public class PostIndexActivity extends SherlockActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getSupportMenuInflater().inflate(R.menu.show, menu);
+		getSupportMenuInflater().inflate(R.menu.show_index, menu);
 
 		return true;
 	}

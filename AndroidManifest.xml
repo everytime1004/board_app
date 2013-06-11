@@ -9,7 +9,8 @@
         android:targetSdkVersion="17" />
 
     <!-- GCM 관련 퍼미션 -->
-    <permission
+    <uses-permission android:name="com.example.board.permission.C2D_MESSAGE" />
+    <permission
         android:name="com.example.board.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <!-- GCM 받기 -->
@@ -20,7 +21,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- 네트워크 접속 권한 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    
+
     <!-- 카메라 -->
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -46,17 +47,17 @@
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.example.board.controller" />
+                <category android:name="com.example.board" />
             </intent-filter>
         </receiver>
 
         <!-- GCM 리시버에서 돌리는 서비스 -->
         <service android:name="com.example.board.GCMIntentService" />
         <!-- 서비스명 변경하면 안됨 -->
-
         <activity
             android:name="com.example.board.view.HomeActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
         </activity>
         <activity
             android:name="com.example.board.view.PostIndexActivity"
