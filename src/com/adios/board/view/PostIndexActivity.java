@@ -33,6 +33,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.adios.board.R;
+import com.adios.board.R.string;
 import com.adios.board.lib.UrlJsonAsyncTask;
 import com.adios.board.model.NetworkInfo;
 import com.adios.board.model.Post;
@@ -416,6 +417,7 @@ public class PostIndexActivity extends SherlockActivity {
 
 		SearchView searchView = (SearchView) menu.findItem(
 				R.id.action_search_task).getActionView();
+		searchView.setQueryHint(getResources().getString(R.string.searchEtHint));
 
 		SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 			public boolean onQueryTextChange(String newText) {

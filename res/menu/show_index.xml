@@ -3,7 +3,7 @@
     <item
         android:id="@+id/action_search_task"
         android:actionViewClass="com.actionbarsherlock.widget.SearchView"
-        android:showAsAction="collapseActionView|ifRoom"
+        android:showAsAction="collapseActionView|ifRoom"        
         android:title="@string/search_task"/>
     <item
         android:id="@+id/action_create_task"
