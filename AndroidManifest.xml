@@ -10,7 +10,8 @@
 
     <!-- GCM 관련 퍼미션 -->
     <uses-permission android:name="com.adios.board.permission.C2D_MESSAGE" />
-    <permission
+
+    <permission
         android:name="com.adios.board.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <!-- GCM 받기 -->
@@ -32,7 +33,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/idios_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock.Light" >
 

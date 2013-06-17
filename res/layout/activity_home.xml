@@ -46,7 +46,7 @@
             android:layout_height="100dp"
             android:layout_margin="3dp"
             android:layout_weight="1"
-            android:background="@drawable/idios_sellcomplete"
+            android:background="@drawable/idios_getperson"
             android:onClick="showBoard" />
 
         <Button

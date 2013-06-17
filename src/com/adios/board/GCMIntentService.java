@@ -112,7 +112,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * description eXtra[4] : post_id
 	 */
 	private static void generateNotification(Context context, String[] eXtra) {
-		int icon = R.drawable.ic_launcher;
+		int icon = R.drawable.idios_launcher;
 		long when = System.currentTimeMillis();
 
 		NotificationManager notificationManager = (NotificationManager) context

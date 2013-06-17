@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"
+                android:src="@drawable/idios_launcher"
                 android:visibility="invisible" />
 
             <ImageView
@@ -77,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"
+                android:src="@drawable/idios_launcher"
                 android:visibility="invisible" />
 
             <ImageView
@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"
+                android:src="@drawable/idios_launcher"
                 android:visibility="invisible" />
 
             <ImageView
@@ -93,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"
+                android:src="@drawable/idios_launcher"
                 android:visibility="invisible" />
 
             <ImageView
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_launcher"
+                android:src="@drawable/idios_launcher"
                 android:visibility="invisible" />
         </LinearLayout>
 
