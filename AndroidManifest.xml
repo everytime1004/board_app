@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.board"
+    package="com.adios.board"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -9,9 +9,9 @@
         android:targetSdkVersion="17" />
 
     <!-- GCM 관련 퍼미션 -->
-    <uses-permission android:name="com.example.board.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.adios.board.permission.C2D_MESSAGE" />
     <permission
-        android:name="com.example.board.permission.C2D_MESSAGE"
+        android:name="com.adios.board.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <!-- GCM 받기 -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -47,29 +47,29 @@
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.example.board" />
+                <category android:name="com.adios.board" />
             </intent-filter>
         </receiver>
 
         <!-- GCM 리시버에서 돌리는 서비스 -->
-        <service android:name="com.example.board.GCMIntentService" />
+        <service android:name="com.adios.board.GCMIntentService" />
         <!-- 서비스명 변경하면 안됨 -->
         <activity
-            android:name="com.example.board.view.HomeActivity"
+            android:name="com.adios.board.view.HomeActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name="com.example.board.view.PostIndexActivity"
+            android:name="com.adios.board.view.PostIndexActivity"
             android:label="@string/title_activity_show" >
         </activity>
         <activity
-            android:name="com.example.board.view.PostShowActivity"
+            android:name="com.adios.board.view.PostShowActivity"
             android:label="@string/title_activity_post_show" >
         </activity>
         <activity
-            android:name="com.example.board.view.AuthActivity"
-            android:label="@string/title_activity_auth" >
+            android:name="com.adios.board.view.AuthActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -77,11 +77,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.board.view.SettingActivity"
+            android:name="com.adios.board.view.SettingActivity"
             android:label="@string/setting" >
         </activity>
         <activity
-            android:name="com.example.board.view.PostCreateActivity"
+            android:name="com.adios.board.view.PostCreateActivity"
             android:label="@string/create_task" >
         </activity>
     </application>

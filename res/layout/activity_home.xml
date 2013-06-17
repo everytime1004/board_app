@@ -19,6 +19,7 @@
             android:id="@+id/boardBuyBtn"
             android:layout_width="0dp"
             android:layout_height="100dp"
+            android:layout_margin="3dp"
             android:layout_weight="1"
             android:background="@drawable/idios_buy"
             android:onClick="showBoard" />
@@ -27,6 +28,7 @@
             android:id="@+id/boardSellBtn"
             android:layout_width="0dp"
             android:layout_height="100dp"
+            android:layout_margin="3dp"
             android:layout_weight="1"
             android:background="@drawable/idios_sell"
             android:onClick="showBoard" />
@@ -39,9 +41,10 @@
         android:weightSum="2" >
 
         <Button
-            android:id="@+id/boardSellCompleteBtn"
+            android:id="@+id/boardRecruitBtn"
             android:layout_width="0dp"
             android:layout_height="100dp"
+            android:layout_margin="3dp"
             android:layout_weight="1"
             android:background="@drawable/idios_sellcomplete"
             android:onClick="showBoard" />
@@ -50,6 +53,7 @@
             android:id="@+id/boardInquiryBtn"
             android:layout_width="0dp"
             android:layout_height="100dp"
+            android:layout_margin="3dp"
             android:layout_weight="1"
             android:background="@drawable/idios_inqury"
             android:onClick="showBoard" />
@@ -65,6 +69,7 @@
             android:id="@+id/settingBtn"
             android:layout_width="0dp"
             android:layout_height="100dp"
+            android:layout_margin="3dp"
             android:layout_weight="1"
             android:background="@drawable/idios_setting"
             android:onClick="showBoard" />

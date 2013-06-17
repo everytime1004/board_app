@@ -23,6 +23,7 @@
     <string name="login">로그인</string>
     <string name="logout">로그아웃</string>
     <string name="create_task">글 쓰기</string>
+    <string name="search_task">검색</string>
     <string name="delete_task">글 삭제</string>
     <string name="setting">환경 설정</string>
     <string name="registeration">회원 가입</string>
@@ -33,5 +34,7 @@
     <string name="remove">삭제</string>
     <string name="takePic">카메라</string>
     <string name="openGallery">앨범</string>
+    <string name="moreTask">더 보기</string>
+    <string name="searchEtHint">글 제목 또는 작성자</string>
 
 </resources>
