@@ -3,7 +3,8 @@
     android:id="@+id/post_index_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:weightSum="10" >
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/post_index_list"
@@ -16,7 +17,8 @@
         android:fastScrollEnabled="false"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
-        android:smoothScrollbar="true" />
+        android:smoothScrollbar="true" 
+        android:layout_weight="9"/>
 
     <Button
         android:id="@+id/moreTaskBtn"
@@ -25,6 +27,7 @@
         android:layout_gravity="bottom"
         android:onClick="moreTaskListener"
         android:text="@string/moreTask"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_weight="1" />
 
 </LinearLayout>
